@@ -39,6 +39,10 @@ app.use(bodyParser.urlencoded({
  * Import Router 
  */
 
+app.get('/' , (req,res) => {
+    res.send('ici la terre');
+});
+
 app.use('/cds-touba-file', express.static('uploads'));
 
 
