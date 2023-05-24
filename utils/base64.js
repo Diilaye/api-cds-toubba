@@ -38,11 +38,8 @@ exports.base64 =  async (base) => {
         fs.writeFileSync(path.join(__dirname,'..','uploads',fileName+'.'+extension), imageBuffer, 'utf8');
 
 
-        console.log(path.join('..','uploads'));
-        
-
         return {
-            'url' : `https://api-zakat.verumsoft.com/zakat-file/${fileName}.${extension}`,
+            'url' : `https://api-cds-touba.verumsoft.com/cds-touba-file/${fileName}.${extension}`,
             'type' :type
         };
 
