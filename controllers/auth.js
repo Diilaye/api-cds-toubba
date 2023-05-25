@@ -17,6 +17,20 @@ require('dotenv').config({
     path: './.env'
 });
 
+const objectPopulate = [
+    {
+        path : 'contactReferent',
+    },
+    {
+        path :'profile'
+    },
+    {
+        path :'facture'
+    }, {
+        path :'cni'
+    },
+];
+
 exports.store = async (req , res , next) => {
     
  
@@ -94,6 +108,21 @@ return message.response(res, message.updateObject('Users') ,  201,{
 }
 
 
+exports.all= async (req,res ,next) => {
+    try {
+         const users = await authModel.find({
+           role: { $ne: 'super' } 
+         }).populate(objectPopulate).exec();
+        
+         return message.response(res, message.updateObject('Users') ,  200 ,{ users  } );
+        
+    } catch (error) {
+       return  message.response(res , message.error() ,404 , error);
+        
+    }
+}
+
+
 exports.auth = async  ( req, res ,_ ) => {
     
    try {
@@ -102,7 +131,7 @@ exports.auth = async  ( req, res ,_ ) => {
         const user = await authModel.findOne({
             email : req.body.email
 
-        }).exec();
+        }).populate(objectPopulate).exec();
 
         console.log('user',user);
         
@@ -152,7 +181,7 @@ exports.auth = async  ( req, res ,_ ) => {
 
 exports.findAuth = async (req , res, _ ) =>  {
 
-    const user = await authModel.findById(req.user.id_user).exec();
+    const user = await authModel.findById(req.user.id_user).populate(objectPopulate).exec();
 
     return message.response(res, message.updateObject('Users') ,  200,{ user  } );
 
@@ -166,7 +195,7 @@ exports.update = async (req, res ,next ) => {
     try {
         console.log(req.body);
 
-        const auth = await  authModel.findById(req.user.id_user);
+        const auth = await  authModel.findById(req.user.id_user).populate(objectPopulate);
             
         if (req.body.phone!=undefined) {
             auth.phone = req.body.phone ;
