@@ -43,11 +43,13 @@ exports.store = async (req , res , next) => {
         } = req.body;
         
         const auth = authModel() ;
+
+        const passwordCrypt = bcrytjs.hashSync(password, salt);
   
         auth.typeAbonnement = typeAbonnement;
         auth.username = username;
         auth.email = email;
-        auth.password = password;
+        auth.password = passwordCrypt;
         auth.role = role;
         auth.profile = profile;
         auth.nom = nom;
@@ -102,6 +104,9 @@ exports.auth = async  ( req, res ,_ ) => {
 
         }).exec();
 
+        console.log('user',user);
+        
+
         if (user) {
             if (bcrytjs.compareSync(req.body.password, user.password)) {
                 const token = jwt.sign({
@@ -149,7 +154,7 @@ exports.findAuth = async (req , res, _ ) =>  {
 
     const user = await authModel.findById(req.user.id_user).exec();
 
-    return message.response(res, message.updateObject('Users') ,  200,{data :user  } );
+    return message.response(res, message.updateObject('Users') ,  200,{ user  } );
 
 
 }
