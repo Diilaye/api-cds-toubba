@@ -36,8 +36,8 @@ const UserModel = new Schema({
     
     role: {
         type : String,
-        enum: ['admin', 'super','ayant-droit' ],
-        default: 'admin'
+        enum: ['utilisateur', 'super','particulier' ],
+        default: 'utilisateur'
     },
 
     ///Info personelle
