@@ -16,6 +16,11 @@ const ContactReferent = new Schema({
         type: String,
     },
 
+    user : {
+        type: Schema.Types.ObjectId,
+        ref: "users"
+    },
+
 
   
 
@@ -23,6 +28,17 @@ const ContactReferent = new Schema({
         type: Date,
         default: Date.now()
     }
+} , {
+    toJSON: {
+        transform: function (doc, ret) {
+          ret.id = ret._id;
+          delete ret._id;
+          delete ret.__v;
+        },
+      },
+},{
+    timestamps: true 
+
 });
 
 module.exports = mongoose.model('contact', ContactReferent);
