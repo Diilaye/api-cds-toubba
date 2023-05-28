@@ -13,7 +13,7 @@ routes.get('/', authMidleweare ,authCtrl.findAuth);
 routes.get('/all', authMidleweare ,authCtrl.all);
 routes.post('/', authCtrl.store);
 routes.post('/auth', authCtrl.auth);
-routes.put('/', authMidleweare , authCtrl.update);
+routes.put('/:id', authMidleweare , authCtrl.update);
 routes.delete('/', authMidleweare ,authCtrl.delete);
 
 module.exports = routes;

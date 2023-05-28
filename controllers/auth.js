@@ -195,7 +195,7 @@ exports.update = async (req, res ,next ) => {
     try {
         console.log(req.body);
 
-        const auth = await  authModel.findById(req.user.id_user).populate(objectPopulate);
+        const auth = await  authModel.findById(req.query.id).populate(objectPopulate);
             
         if (req.body.phone!=undefined) {
             auth.phone = req.body.phone ;
