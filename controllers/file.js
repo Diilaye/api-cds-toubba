@@ -20,7 +20,7 @@ exports.store = async (req, res ,next ) => {
 
     file.type  = F['type'];
     
-    file.user = req.user.id;
+    // file.user = req.user.id;
 
     const saveFile = await  file.save();
 
