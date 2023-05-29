@@ -190,15 +190,16 @@ exports.findAuth = async (req , res, _ ) =>  {
 
 exports.update = async (req, res ,next ) => {
 
-   
     
     try {
-        console.log(req.body);
+        console.log(req.params);
 
-        const auth = await  authModel.findById(req.query.id).populate(objectPopulate);
+        const auth = await  authModel.findById(req.params.id).populate(objectPopulate);
+    
+        console.log(auth);
             
-        if (req.body.phone!=undefined) {
-            auth.phone = req.body.phone ;
+        if (req.body.typeAbonnement!=undefined) {
+            auth.typeAbonnement = req.body.typeAbonnement ;
         }
         if (req.body.password !=undefined) {
             if(auth.password == undefined) {
@@ -219,21 +220,9 @@ exports.update = async (req, res ,next ) => {
         }
     
     
-        if (req.body.nom !=undefined) {
+        if (req.body.username !=undefined) {
             
-            auth.nom = req.body.nom ;
-    
-        }
-    
-        if (req.body.prenom !=undefined) {
-            
-            auth.prenom = req.body.prenom ;
-    
-        }
-    
-        if (req.body.role !=undefined) {
-            
-            auth.role = req.body.role ;
+            auth.username = req.body.username ;
     
         }
     
@@ -243,89 +232,90 @@ exports.update = async (req, res ,next ) => {
     
         }
     
-        if (req.body.imageCard !=undefined) {
+        if (req.body.active !=undefined) {
             
-            auth.imageCard = req.body.imageCard ;
+            auth.active = req.body.active ;
     
         }
     
-        if (req.body.NameofIDCard !=undefined) {
-            
-            auth.NameofIDCard = req.body.NameofIDCard ;
-    
-        }
-
-        if (req.body.NumberfIDCard !=undefined) {
-            
-            auth.NumberfIDCard = req.body.NumberfIDCard;
-    
-        }
-
-        if (req.body.MaritalStatut !=undefined) {
-            
-            auth.MaritalStatut = req.body.MaritalStatut;
-    
-        }
-
-        if (req.body.sexe !=undefined) {
-            
-            auth.sexe = req.body.sexe;
-    
-        }
-
-        
-
-        if (req.body.description !=undefined) {
-            
-            auth.description = req.body.description;
-    
-        }
-
         if (req.body.profile !=undefined) {
             
-            auth.profile = req.body.profile;
+            auth.profile = req.body.profile ;
     
         }
-
-        if (req.body.avatar !=undefined) {
-
-            auth.avatar = req.body.avatar;
+    
+       
+    
+        if (req.body.nom !=undefined) {
+            
+            auth.nom = req.body.nom;
     
         }
-
-        if (req.body.contry !=undefined) {
-
-            auth.contry = req.body.contry;
+    
+        if (req.body.prenom !=undefined) {
+            
+            auth.prenom = req.body.prenom;
     
         }
-
+    
+        
+    
+        if (req.body.telephone !=undefined) {
+            
+            auth.telephone = req.body.telephone;
+    
+        }
+    
         if (req.body.city !=undefined) {
-
+            
             auth.city = req.body.city;
     
         }
-
-        if (req.body.projects !=undefined) {
-
-            auth.projects.push(req.body.projects) ;
+    
+        if (req.body.addresse !=undefined) {
+    
+            auth.addresse = req.body.addresse;
     
         }
-
-        if (req.body.zakat !=undefined) {
-
-            auth.zakat.push(req.body.zakat) ;
+    
+        if (req.body.numeroSecuriteSocial !=undefined) {
+    
+            auth.numeroSecuriteSocial = req.body.numeroSecuriteSocial;
     
         }
-
-        if (req.body.transactions !=undefined) {
-
-            auth.transactions.push(req.body.transactions) ;
+    
+    
+        if (req.body.sexe !=undefined) {
+    
+            auth.sexe = req.body.sexe;
     
         }
+    
+        if (req.body.cni !=undefined) {
+    
+            auth.cni = req.body.cni;
+    
+        }
+    
+        if (req.body.facture !=undefined) {
+    
+            auth.facture = req.body.facture;
+    
+        }
+    
+        if (req.body.appreciation !=undefined) {
+    
+            auth.appreciation = req.body.appreciation;
+    
+        }
+    
         
-
+        
+    
     
         const userUpdate =await  auth.save();
+    
+        const Uf =  await  authModel.findById(userUpdate.id).populate(objectPopulate)
     
     
         const token = jwt.sign({
@@ -334,9 +324,9 @@ exports.update = async (req, res ,next ) => {
             phone_user : auth.phone
         }, process.env.JWT_SECRET, { expiresIn: '8784h' });
     
-        return message.response(res, message.updateObject('Users')  , 200,{token , phone : auth.phone , role : auth.role , user:userUpdate  });
+        return message.response(res, message.updateObject('Users')  , 200,{token , phone : auth.phone , role : auth.role , user:Uf  });
     
-
+        
     } catch (error) {
        
        return  message.response(res , message.error() ,404 , error);

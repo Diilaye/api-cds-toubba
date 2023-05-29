@@ -68,7 +68,7 @@ exports.update = async  (req,res,next)=> {
             phone
         } = req.body;
 
-        const contact  = contactModel.findById(req.params.id);
+        const contact  = await contactModel.findById(req.params.id);
 
         if (phone != undefined) {
             contact.phone = phone;  
