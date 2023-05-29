@@ -48,7 +48,7 @@ app.use('/cds-touba-file', express.static('uploads'));
 
 app.use('/v1/api/users' , authRoute);
 
-app.use('/v1/api/files' , auth,fileRoute);
+app.use('/v1/api/files' ,fileRoute);
 
 app.use('/v1/api/contact' , auth ,  contactRoute);
 

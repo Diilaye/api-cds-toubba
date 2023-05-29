@@ -60,34 +60,36 @@ exports.one  = async (req,res,next)=>{
 }
 
 exports.update = async  (req,res,next)=> {
-
+    
     try {
         let {
             nom,
             prenom,
             phone
         } = req.body;
-
+    
         const contact  = await contactModel.findById(req.params.id);
-
+    
+        console.log(contact);
+    
         if (phone != undefined) {
             contact.phone = phone;  
         }
-
+    
         
         if (nom != undefined) {
             contact.nom = nom;  
         }
-
+    
         if (prenom != undefined) {
             contact.prenom = prenom;  
         }
         
-
+    
         const contactSave = await contact.save();
-
+    
         return message.response(res,message.updateObject('Contact'),200,contactSave);
-
+    
     } catch (error) {
 
        return message.response(res , message.error() ,404 , error);
