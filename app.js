@@ -50,9 +50,9 @@ app.use('/v1/api/users' , authRoute);
 
 app.use('/v1/api/files' ,fileRoute);
 
-app.use('/v1/api/contact' , auth ,  contactRoute);
+app.use('/v1/api/contact'  ,  contactRoute);
 
-app.use('/v1/api/transactions' , auth ,  transactionRoute);
+app.use('/v1/api/transactions'  ,  transactionRoute);
 
 db().then(_ => {
     const port = process.env.PORT

@@ -19,7 +19,6 @@ exports.store  = async (req,res,next) => {
         contact.prenom = prenom;
 
         contact.phone = phone;
-        contact.user = req.user.id_user;
 
         const contactSave = await contact.save();
 
