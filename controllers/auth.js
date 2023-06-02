@@ -333,6 +333,12 @@ exports.update = async (req, res ,next ) => {
     }
 }   
 
-exports.delete = (req, res , next ) => authModel.findByIdAndDelete(req.user.id_user).then(result => {
-   return  message.response(res , message.createObject('Code') ,201 , num);
-}).catch( err =>  message.response(res , message.error() ,404 , err));
+exports.delete = (req, res , next ) => {
+
+    const {id} = req.params;
+
+    authModel.findByIdAndDelete(id).then(result => {
+        return  message.response(res , message.deleteObject('Users') ,200 , "delete success");
+     }).catch( err =>  message.response(res , message.error() ,404 , err));
+    
+}
