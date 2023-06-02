@@ -65,12 +65,28 @@ const UserModel = new Schema({
     },
 
 
-    city : {
+    pays : {
+        type : String,
+        enum: ["france", "italie", "angleterre  ", "portugal" ],
+        default: 'france'
+    },
+
+    vile : {
         type : String,
         default :""
     },
 
-    addresse : {
+    code_postal : {
+        type : String,
+        default :""
+    },
+
+    rue : {
+        type : String,
+        default :""
+    },
+
+    numero_rue : {
         type : String,
         default :""
     },

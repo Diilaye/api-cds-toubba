@@ -46,8 +46,11 @@ exports.store = async (req , res , next) => {
             nom,
             prenom,
             telephone,
-            city,
-            addresse,
+            pays,
+            rue,
+            numero_rue,
+            code_postal,
+            ville,
             numeroSecuriteSocial,
             sexe,
             cni,
@@ -69,8 +72,11 @@ exports.store = async (req , res , next) => {
         auth.nom = nom;
         auth.prenom = prenom;
         auth.telephone = telephone;
-        auth.city = city;
-        auth.addresse = addresse;
+        auth.pays = pays;
+        auth.rue = rue;
+        auth.numero_rue = numero_rue;
+        auth.code_postal = code_postal;
+        auth.ville = ville;
         auth.numeroSecuriteSocial = numeroSecuriteSocial;
         auth.sexe = sexe;
         auth.cni = cni;
@@ -266,18 +272,37 @@ exports.update = async (req, res ,next ) => {
     
         }
     
-        if (req.body.city !=undefined) {
+        if (req.body.pays !=undefined) {
             
-            auth.city = req.body.city;
+            auth.pays = req.body.pays;
     
         }
     
-        if (req.body.addresse !=undefined) {
+        if (req.body.ville !=undefined) {
     
-            auth.addresse = req.body.addresse;
+            auth.ville = req.body.ville;
     
         }
     
+        if (req.body.rue !=undefined) {
+    
+            auth.rue = req.body.rue;
+    
+        }
+
+        if (req.body.numero_rue !=undefined) {
+    
+            auth.numero_rue = req.body.numero_rue;
+    
+        }
+
+        if (req.body.code_postal !=undefined) {
+    
+            auth.code_postal = req.body.code_postal;
+    
+        }
+    
+
         if (req.body.numeroSecuriteSocial !=undefined) {
     
             auth.numeroSecuriteSocial = req.body.numeroSecuriteSocial;
