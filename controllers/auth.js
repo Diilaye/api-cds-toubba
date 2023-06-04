@@ -56,7 +56,6 @@ exports.store = async (req , res , next) => {
             cni,
             facture,
             contactReferent,
-            dateJoin
         } = req.body;
         
         const auth = authModel() ;
@@ -82,7 +81,6 @@ exports.store = async (req , res , next) => {
         auth.cni = cni;
         auth.facture = facture;
         auth.contactReferent = contactReferent;
-        auth.dateJoin = dateJoin;
 
 const token = jwt.sign({
     id_user: auth._id,
