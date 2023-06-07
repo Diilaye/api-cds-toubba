@@ -13,7 +13,7 @@ const routes = new express.Router();
 routes.get('/', auth,messageCtrl.all);
 routes.get('/:id', auth,messageCtrl.one);
 routes.put('/:id', auth,messageCtrl.update);
-routes.post('/',messageCtrl.store);
+routes.post('/',auth,messageCtrl.store);
 routes.delete('/:id', auth,messageCtrl.delete);
 
 module.exports = routes;

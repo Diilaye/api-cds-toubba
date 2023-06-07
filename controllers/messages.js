@@ -14,34 +14,49 @@ const objectPopulate = [
     {
         path :'recive'
     }, 
+    {
+        path : 'send' ,
+        populate : [{
+            path : 'contactReferent',
+        },
+        {
+            path :'profile'
+        },
+        {
+            path :'facture'
+        }, {
+            path :'cni'
+        },]
+    }
 ];
 exports.store  = async (req,res,next) => {
 
+
     try {
-        let {
-            objectEmail,
-            messageF,
-            recive,
-            files
-        } = req.body;
+    let {
+        objectEmail,
+        messageF,
+        recive,
+        files
+    } = req.body;
 
-        const messageS  = contactModel();
+    const messageS  = messageModel();
 
-        contact.objectEmail = objectEmail;
+    messageS.objectEmail = objectEmail;
 
-        contact.message = messageF;
+    messageS.message = messageF;
 
-        contact.send = req.user.id_user;
+    messageS.send = req.user.id_user;
 
-        contact.recive = recive;
+    messageS.recive = recive;
 
-        contact.files = files;
+    messageS.files = files;
 
-        const messageSave = await messageS.save();
+    const messageSave = await messageS.save();
 
-        const mesF = await messageModel.findById(messageSave.id).populate(objectPopulate).exec();
+    const mesF = await messageModel.findById(messageSave.id).populate(objectPopulate).exec();
 
-        return message.response(res,message.createObject('e-mail'),201,messageSave);
+    return message.response(res,message.createObject('e-mail'),201,mesF);
 
     } catch (error) {
 
