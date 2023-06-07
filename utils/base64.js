@@ -30,12 +30,11 @@ exports.base64 =  async (base) => {
 
         let type = decodedImg.type;
 
-        let extension = mime.getExtension(type);
 
         let fileName = uid.uid();
 
 
-        fs.writeFileSync(path.join(__dirname,'..','uploads',fileName+'.'+extension), imageBuffer, 'utf8');
+        fs.writeFileSync(path.join(__dirname,'..','uploads',fileName+'.'+type.split('/')[1]), imageBuffer, 'utf8');
 
 
         return {
