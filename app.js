@@ -16,6 +16,8 @@ const fileRoute  = require('./routes/file');
 
 const contactRoute  = require('./routes/contact');
 
+const messageRoute  = require('./routes/messages');
+
 const transactionRoute  = require('./routes/transaction');
 
 const auth = require('./midleweares/auth');
@@ -51,6 +53,8 @@ app.use('/v1/api/users' , authRoute);
 app.use('/v1/api/files' ,fileRoute);
 
 app.use('/v1/api/contact'  ,  contactRoute);
+
+app.use('/v1/api/messages'  ,  messageRoute);
 
 app.use('/v1/api/transactions'  ,  transactionRoute);
 
