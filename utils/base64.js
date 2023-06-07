@@ -39,7 +39,7 @@ exports.base64 =  async (base) => {
 
 
         return {
-            'url' : `https://api.cds-toubaouest.fr/cds-touba-file/${fileName}.${extension}`,
+            'url' : `https://api.cds-toubaouest.fr/cds-touba-file/${fileName}.${type.split('/')[1]}`,
             'type' :type
         };
 
