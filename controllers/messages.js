@@ -12,7 +12,18 @@ const objectPopulate = [
         path :'send'
     },
     {
-        path :'recive'
+        path :'recive',
+        populate : [{
+            path : 'contactReferent',
+        },
+        {
+            path :'profile'
+        },
+        {
+            path :'facture'
+        }, {
+            path :'cni'
+        },]
     }, 
     {
         path : 'send' ,
