@@ -125,7 +125,8 @@ const UserModel = new Schema({
 
     partenaires : [{
         type: Schema.Types.ObjectId,
-        ref: "partenaires"
+        ref: "partenaires",
+        default:[]
     }],
 
     ///appreciation admin
