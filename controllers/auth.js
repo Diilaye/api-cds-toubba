@@ -29,6 +29,14 @@ const objectPopulate = [
     }, {
         path :'cni'
     },
+    {
+        path :'partenaires' ,
+        populate : [{
+            path :'profile',
+        },{
+            path :'justificatif',
+        },]
+    }
 ];
 
 exports.store = async (req , res , next) => {
