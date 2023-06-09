@@ -18,6 +18,8 @@ const contactRoute  = require('./routes/contact');
 
 const messageRoute  = require('./routes/messages');
 
+const partenairesRoute  = require('./routes/partenaires');
+
 const transactionRoute  = require('./routes/transaction');
 
 const auth = require('./midleweares/auth');
@@ -55,6 +57,8 @@ app.use('/v1/api/files' ,fileRoute);
 app.use('/v1/api/contact'  ,  contactRoute);
 
 app.use('/v1/api/messages'  ,  messageRoute);
+
+app.use('/v1/api/partenaires'  ,  partenairesRoute);
 
 app.use('/v1/api/transactions'  ,  transactionRoute);
 

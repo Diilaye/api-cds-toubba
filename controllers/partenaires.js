@@ -12,18 +12,18 @@ exports.store = async (req, res ,next ) => {
 
         let {
             type,
-profile,
-nom,
-prenom,
-telephone,
-pays,
-ville,
-code_postal,
-rue,
-numero_rue,
-numeroSecuriteSocial,
-sexe,
-justificatif
+            profile,
+            nom,
+            prenom,
+            telephone,
+            pays,
+            ville,
+            code_postal,
+            rue,
+            numero_rue,
+            numeroSecuriteSocial,
+            sexe,
+            justificatif
         } = req.body;
 
 
