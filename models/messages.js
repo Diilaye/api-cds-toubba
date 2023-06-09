@@ -27,7 +27,8 @@ const MessageEmail = new Schema({
 
     recive : {
         type: Schema.Types.ObjectId,
-        ref: "users"
+        ref: "users",
+        default : null
     },
 
     files : [{

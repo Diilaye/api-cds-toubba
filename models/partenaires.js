@@ -3,42 +3,19 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 
-const UserModel = new Schema({
+const Partenaires = new Schema({
 
-    typeAbonnement  : {
-        type : String,
-        enum: ['1', '2' ,'3' ,'4' ,'5' ],
-        default: '1'
-    },
 
-    username: {
+    status : {
         type: String,
+        enum: ['active', 'inactive' ],
+        default: 'active'
     },
     
-    email: {
-        type: String,
-        required : true,
-        unique : true
-    },
-
-    active : {
-        type: String,
-        default :'inactive'
-    },
-
-
-    password: {
-        type: String,
-    },
-
-    passwords : {
-        type : Array
-    },
-    
-    role: {
+    type: {
         type : String,
-        enum: ['utilisateur', 'super','particulier' ],
-        default: 'utilisateur'
+        enum: ['partenaires', 'enfants' ],
+        default: 'partenaires'
     },
 
     ///Info personelle
@@ -71,7 +48,7 @@ const UserModel = new Schema({
         default: 'france'
     },
 
-    vile : {
+    ville : {
         type : String,
         default :""
     },
@@ -104,43 +81,12 @@ const UserModel = new Schema({
 
     ///Info Sur Documents
 
-    cni : {
-        type: Schema.Types.ObjectId,
-        ref: "media"
-    },
-
-    facture : {
+    justificatif : {
         type: Schema.Types.ObjectId,
         ref: "media"
     },
     
-///contact referent
-    contactReferent : {
-        type: Schema.Types.ObjectId,
-        ref: "contact"
-    },
-
-
-    ///partenaires 
-
-    partenaires : [{
-        type: Schema.Types.ObjectId,
-        ref: "partenaires"
-    }],
-
-    ///appreciation admin
-
-    appreciation : {
-        type: String,
-        default :""
-    },
-  
-    token : {
-        type : String,
-        default : ""
-    },
-    
-    dateJoin: {
+    date: {
         type: Date,
         default: Date.now()
     }
@@ -159,4 +105,4 @@ const UserModel = new Schema({
     timestamps: true 
   });
 
-module.exports = mongoose.model('users', UserModel) ;
+module.exports = mongoose.model('partenaires', Partenaires) ;
