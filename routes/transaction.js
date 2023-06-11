@@ -13,7 +13,7 @@ routes.get('/', auth,transactionCtrl.all);
 routes.get('/success',transactionCtrl.success);
 routes.get('/failled',transactionCtrl.failled);
 routes.get('/:id', auth, transactionCtrl.one);
-routes.post('/',transactionCtrl.store);
+routes.post('/',auth,transactionCtrl.store);
 routes.delete('/:id',  auth,transactionCtrl.delete);
 
 module.exports = routes;

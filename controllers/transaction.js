@@ -22,44 +22,42 @@ exports.failled  = async (req, res ,next )=> {
 }
 
 exports.store = async  (req,res,next) => {
+
+
+    
+
+    
+           
     
 
     try {
 
 
-        const auth = authModel.findById(req.user.id_user).populate( {
+        const auth = await authModel.findById(req.user.id_user).populate( {
             path :'partenaires' ,
-            populate : [{
-                path :'profile',
-            },{
-                path :'justificatif',
-            },]
+            
         }).exec();
-
-        const amount = auth.typeAbonnement == '1' ? 45 : auth.typeAbonnement == '2' ?60 :  auth.typeAbonnement == '3' ? 80: 70;
-
-
+    
+        let amount = auth.typeAbonnement == '1' ? 45 : auth.typeAbonnement == '2' ?60 :  auth.typeAbonnement == '3' ? 80: 70;
+    
         for (const iterator of auth.partenaires) {
-            if (element['type'] == "enfants") {
-                amount =+10;
+            if (iterator['type'] == "enfants") {
+                amount =amount + 10;
             }
         }
-
+    
         
-
+    
         const transaction = transactionModel();
-
+    
         const ref = orderid.generate();
             
             
         transaction.reference =  ref;
-
-        transaction.user  = req.user.id_user;
-
-        transaction.amount  = amount;
-
     
-        transaction.type  = type;
+        transaction.user  = req.user.id_user;
+    
+        transaction.amount  = amount;
     
         const  transactionSave = await transaction.save();
     
@@ -109,8 +107,6 @@ exports.store = async  (req,res,next) => {
          
             }
         });
-
-        
                
 
     } catch (error) {
