@@ -13,6 +13,7 @@ routes.get('/', authMidleweare ,authCtrl.findAuth);
 routes.get('/all', authMidleweare ,authCtrl.all);
 routes.post('/', authCtrl.store);
 routes.post('/auth', authCtrl.auth);
+routes.post('/forgetPassword', authCtrl.forgetPassword);
 routes.put('/:id', authMidleweare , authCtrl.update);
 routes.delete('/:id', authMidleweare ,authCtrl.delete);
 

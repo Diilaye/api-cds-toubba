@@ -39,6 +39,12 @@ const objectPopulate = [
     }
 ];
 
+exports.forgetPassword =  async (req,res ,next) => {
+    let {email} =req.boddy;
+
+    
+}
+
 exports.store = async (req , res , next) => {
     
  

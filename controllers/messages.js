@@ -14,30 +14,46 @@ const objectPopulate = [
     {
         path :'recive',
         populate : [{
-            path : 'contactReferent',
-        },
-        {
-            path :'profile'
-        },
-        {
-            path :'facture'
-        }, {
-            path :'cni'
+        path : 'contactReferent',
+    },
+    {
+        path :'profile'
+    },
+    {
+        path :'facture'
+    }, {
+        path :'cni'
+    },
+    {
+        path :'partenaires' ,
+        populate : [{
+            path :'profile',
+        },{
+            path :'justificatif',
         },]
+    }]
     }, 
     {
         path : 'send' ,
         populate : [{
-            path : 'contactReferent',
-        },
-        {
-            path :'profile'
-        },
-        {
-            path :'facture'
-        }, {
-            path :'cni'
+        path : 'contactReferent',
+    },
+    {
+        path :'profile'
+    },
+    {
+        path :'facture'
+    }, {
+        path :'cni'
+    },
+    {
+        path :'partenaires' ,
+        populate : [{
+            path :'profile',
+        },{
+            path :'justificatif',
         },]
+    }]
     }
 ];
 exports.store  = async (req,res,next) => {
