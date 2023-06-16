@@ -11,7 +11,10 @@ var ObjectID = require('mongodb').ObjectID
 
 const axios = require('axios');
 
+const sgMail = require('@sendgrid/mail')
+
 const message  =  require('../utils/message');
+const codeEmail = require('../models/code-email');
 
 require('dotenv').config({
     path: './.env'
@@ -40,9 +43,73 @@ const objectPopulate = [
 ];
 
 exports.forgetPassword =  async (req,res ,next) => {
-    let {email} =req.boddy;
-
     
+    let {email} = req.body;
+
+    const min = 1000000;
+
+    const max = 9999990;
+
+    const num = Math.floor(Math.random() * (max - min + 1)) + min;
+    
+    sgMail.setApiKey("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")
+    const msg = {
+      to: email, // Change to your recipient
+      from: 'admin@cds-toubaouest.fr', // Change to your verified sender
+      subject: 'Teste mailling cds-touba',
+      Text :`clique sur le lien de réinitialisation : https://cds-toubaouest.fr/forgetPassword?code=${num}&email=${email}`
+    }
+    codeT =  codeEmail();
+    codeT.code = num.toString();
+    code.email = email ;
+
+    codeF =await codeT.save();
+    sgMail
+      .send(msg)
+      .then(()  =>  {
+        console.log('Email sent');
+        
+        return message.response(res, message.createObject('Code') ,  200 ,{ code  : 'envovez' } );
+
+      })
+      .catch((error) => {
+       return  message.response(res , message.error() ,404 , error);
+      })
+}
+
+exports.verifCodeVerif = async (req,res) => {
+    
+    
+    try {
+        const codeF = await codeEmail.findOne({
+            code : req.body.code,
+            email : req.body.email,
+            is_treat : false
+        });
+    
+        if(codeF) {
+    
+            const user = await authModel.findOne({
+                email : req.body.email,
+            }).exec();
+    
+            const passwordCrypt = bcrytjs.hashSync(req.body.password, salt);
+    
+            user.password = passwordCrypt ;
+    
+            const userF = await user.save();
+    
+            return message.response(res, message.updateObjectObject('User') ,  200 ,{ data  : 'Mot de passe changer' } );
+    
+    
+        }
+    } catch (error) {
+       return  message.response(res , message.error() ,404 , error);
+        
+    }
+
+
+
 }
 
 exports.store = async (req , res , next) => {
