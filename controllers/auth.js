@@ -52,7 +52,7 @@ exports.forgetPassword =  async (req,res ,next) => {
 
     const num = Math.floor(Math.random() * (max - min + 1)) + min;
     
-    sgMail.setApiKey("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")
+    sgMail.setApiKey(process.env.KEYEMAIL)
     const msg = {
       to: email, // Change to your recipient
       from: 'admin@cds-toubaouest.fr', // Change to your verified sender
@@ -88,6 +88,10 @@ exports.verifCodeVerif = async (req,res) => {
         });
     
         if(codeF) {
+
+            codeF.is_treat = true;
+
+            await codeF.save();
     
             const user = await authModel.findOne({
                 email : req.body.email,
