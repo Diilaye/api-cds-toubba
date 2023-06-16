@@ -61,7 +61,7 @@ exports.forgetPassword =  async (req,res ,next) => {
     }
     codeT =  codeEmail();
     codeT.code = num.toString();
-    code.email = email ;
+    codeT.email = email ;
 
     codeF =await codeT.save();
     sgMail
