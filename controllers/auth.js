@@ -13,6 +13,9 @@ const axios = require('axios');
 
 const sgMail = require('@sendgrid/mail')
 
+const nodemailer = require('nodemailer');
+
+
 const message  =  require('../utils/message');
 const codeEmail = require('../models/code-email');
 
@@ -51,30 +54,47 @@ exports.forgetPassword =  async (req,res ,next) => {
     const max = 9999990;
 
     const num = Math.floor(Math.random() * (max - min + 1)) + min;
-    
-    sgMail.setApiKey(process.env.KEYEMAIL)
-    const msg = {
-      to: email, // Change to your recipient
-      from: 'admin@cds-toubaouest.fr', // Change to your verified sender
-      subject: 'Teste mailling cds-touba',
-      Text :`clique sur le lien de réinitialisation : https://cds-toubaouest.fr/forgetPassword?code=${num}&email=${email}`
-    }
+
+
+// Configurer le transporteur SMTP
+const transporter = nodemailer.createTransport({
+  service: 'SMTP',
+  host: 'smtp.ionos.fr', // 'ssl0.ovh.net',
+  port: 465,
+  secure: true, // Utilisez true si vous utilisez SSL/TLS
+  auth: {
+    user: 'admin@cds-toubaouest.fr',
+    pass: 'Pf@19581982'
+  }
+});
+
     codeT =  codeEmail();
     codeT.code = num.toString();
     codeT.email = email ;
 
     codeF =await codeT.save();
-    sgMail
-      .send(msg)
-      .then(()  =>  {
-        console.log('Email sent');
-        
-        return message.response(res, message.createObject('Code') ,  200 ,{ code  : 'envovez' } );
 
-      })
-      .catch((error) => {
-       return  message.response(res , message.error() ,404 , error);
-      })
+// Définir les informations de l'e-mail
+const mailOptions = {
+  from: 'admin@cds-toubaouest.fr',
+  to: email,
+  subject:  'Code de vérification mailling cds-touba',
+  html: `votre code de verification est le : <strong>${num}</strong> .`
+};
+
+// Envoyer l'e-mail
+transporter.sendMail(mailOptions, (error, info) => {
+  if (error) {
+    console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
+    return  message.response(res , message.error() ,404 , error);
+
+  } else {
+    console.log('E-mail envoyé avec succès:', info.response);
+    return message.response(res, message.createObject('Code') ,  200 ,{ "code"  : 'envovez' } );
+
+  }
+});
+    
 }
 
 exports.verifCodeVerif = async (req,res) => {
@@ -83,7 +103,6 @@ exports.verifCodeVerif = async (req,res) => {
     try {
         const codeF = await codeEmail.findOne({
             code : req.body.code,
-            email : req.body.email,
             is_treat : false
         });
     
@@ -94,7 +113,7 @@ exports.verifCodeVerif = async (req,res) => {
             await codeF.save();
     
             const user = await authModel.findOne({
-                email : req.body.email,
+                email : codeF.email,
             }).exec();
     
             const passwordCrypt = bcrytjs.hashSync(req.body.password, salt);
