@@ -98,18 +98,20 @@ transporter.sendMail(mailOptions, (error, info) => {
 }
 
 exports.verifCodeVerif = async (req,res) => {
-    
-    
+   
     try {
+        console.log(req.body);
         const codeF = await codeEmail.findOne({
             code : req.body.code,
             is_treat : false
         });
     
+        console.log(codeF);
+    
         if(codeF) {
-
+    
             codeF.is_treat = true;
-
+    
             await codeF.save();
     
             const user = await authModel.findOne({
@@ -122,9 +124,7 @@ exports.verifCodeVerif = async (req,res) => {
     
             const userF = await user.save();
     
-            return message.response(res, message.updateObjectObject('User') ,  200 ,{ data  : 'Mot de passe changer' } );
-    
-    
+            return message.response(res, message.updateObject('User') ,  200 ,{ data  : 'Mot de passe changer' } );
         }
     } catch (error) {
        return  message.response(res , message.error() ,404 , error);
