@@ -181,6 +181,7 @@ exports.store = async (req , res , next) => {
                 cni,
                 facture,
                 contactReferent,
+                dateNaiss
             } = req.body;
             
             const auth = authModel() ;
@@ -188,6 +189,7 @@ exports.store = async (req , res , next) => {
             const passwordCrypt = bcrytjs.hashSync(password, salt);
         
             auth.typeAbonnement = typeAbonnement;
+            auth.dateNaiss = dateNaiss;
             auth.username = username;
             auth.email = email;
             auth.password = passwordCrypt;
