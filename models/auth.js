@@ -93,7 +93,7 @@ const UserModel = new Schema({
 
     numeroSecuriteSocial  : {
         type : String,
-        default :""
+        unique : true
     },
 
     sexe: {

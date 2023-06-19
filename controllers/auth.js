@@ -7,12 +7,6 @@ const salt = bcrytjs.genSaltSync(10);
 
 const jwt = require('jsonwebtoken');
 
-var ObjectID = require('mongodb').ObjectID
-
-const axios = require('axios');
-
-const sgMail = require('@sendgrid/mail')
-
 const nodemailer = require('nodemailer');
 
 
@@ -140,6 +134,22 @@ exports.store = async (req , res , next) => {
  
     try {
 
+        const UserEmailF = await authModel.findOne({
+            email : req.body.email
+        }).excec();
+
+        if (UserEmailF) {
+            return message.response(res , message.error() , 400 , 'Email déjàs utilisées ');
+        }
+
+        const UserEmailS = await authModel.findOne({
+            email : req.body.numeroSecuriteSocial
+        }).excec();
+
+        if (UserEmailS) {
+            return message.response(res , message.error() , 402 , 'Numéro sécurité social déjàs utilisées ');
+        }
+
         let {
             typeAbonnement,
             username,
@@ -186,20 +196,20 @@ exports.store = async (req , res , next) => {
         auth.facture = facture;
         auth.contactReferent = contactReferent;
 
-const token = jwt.sign({
-    id_user: auth._id,
-    roles_user : auth.role , 
-    email_user : auth.email
-}, process.env.JWT_SECRET, { expiresIn: '8784h' });
+        const token = jwt.sign({
+            id_user: auth._id,
+            roles_user : auth.role , 
+            email_user : auth.email
+        }, process.env.JWT_SECRET, { expiresIn: '8784h' });
 
-auth.token = token; 
+        auth.token = token; 
 
-const authSave = await auth.save();
+        const authSave = await auth.save();
 
-return message.response(res, message.updateObject('Users') ,  201,{
-    user : authSave,
-    token ,
-} );
+        return message.response(res, message.updateObject('Users') ,  201,{
+            user : authSave,
+            token ,
+        } );
 
 
     
