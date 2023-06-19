@@ -132,24 +132,31 @@ exports.verifCodeVerif = async (req,res) => {
 exports.store = async (req , res , next) => {
     
  
+   
+
+
+
+
+
+
     try {
 
         const UserEmailF = await authModel.findOne({
             email : req.body.email
-        }).excec();
-
+        }).exec();
+    
         if (UserEmailF) {
             return message.response(res , message.error() , 400 , 'Email déjàs utilisées ');
         }
-
+    
         const UserEmailS = await authModel.findOne({
             email : req.body.numeroSecuriteSocial
-        }).excec();
-
+        }).exec();
+    
         if (UserEmailS) {
             return message.response(res , message.error() , 402 , 'Numéro sécurité social déjàs utilisées ');
         }
-
+    
         let {
             typeAbonnement,
             username,
@@ -173,9 +180,9 @@ exports.store = async (req , res , next) => {
         } = req.body;
         
         const auth = authModel() ;
-
+    
         const passwordCrypt = bcrytjs.hashSync(password, salt);
-  
+    
         auth.typeAbonnement = typeAbonnement;
         auth.username = username;
         auth.email = email;
@@ -195,22 +202,21 @@ exports.store = async (req , res , next) => {
         auth.cni = cni;
         auth.facture = facture;
         auth.contactReferent = contactReferent;
-
+    
         const token = jwt.sign({
             id_user: auth._id,
             roles_user : auth.role , 
             email_user : auth.email
         }, process.env.JWT_SECRET, { expiresIn: '8784h' });
-
+    
         auth.token = token; 
-
+    
         const authSave = await auth.save();
-
+    
         return message.response(res, message.updateObject('Users') ,  201,{
             user : authSave,
             token ,
         } );
-
 
     
     } catch (error) {
