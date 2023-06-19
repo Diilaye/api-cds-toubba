@@ -9,6 +9,7 @@ const jwt = require('jsonwebtoken');
 
 const nodemailer = require('nodemailer');
 
+const veriffMAil = require('deep-email-validator');
 
 const message  =  require('../utils/message');
 const codeEmail = require('../models/code-email');
@@ -131,7 +132,7 @@ exports.verifCodeVerif = async (req,res) => {
 
 exports.store = async (req , res , next) => {
     
- 
+    
    
 
 
@@ -141,82 +142,93 @@ exports.store = async (req , res , next) => {
 
     try {
 
-        const UserEmailF = await authModel.findOne({
-            email : req.body.email
-        }).exec();
+        const verif= await veriffMAil.validate(req.body.email);
     
-        if (UserEmailF) {
-            return message.response(res , message.error() , 400 , 'Email déjàs utilisées ');
-        }
-    
-        const UserEmailS = await authModel.findOne({
-            email : req.body.numeroSecuriteSocial
-        }).exec();
-    
-        if (UserEmailS) {
-            return message.response(res , message.error() , 402 , 'Numéro sécurité social déjàs utilisées ');
-        }
-    
-        let {
-            typeAbonnement,
-            username,
-            email,
-            password,
-            role,
-            profile,
-            nom,
-            prenom,
-            telephone,
-            pays,
-            rue,
-            numero_rue,
-            code_postal,
-            ville,
-            numeroSecuriteSocial,
-            sexe,
-            cni,
-            facture,
-            contactReferent,
-        } = req.body;
+        if (verif.valid) {
+            const UserEmailF = await authModel.findOne({
+                email : req.body.email
+            }).exec();
         
-        const auth = authModel() ;
-    
-        const passwordCrypt = bcrytjs.hashSync(password, salt);
-    
-        auth.typeAbonnement = typeAbonnement;
-        auth.username = username;
-        auth.email = email;
-        auth.password = passwordCrypt;
-        auth.role = role;
-        auth.profile = profile;
-        auth.nom = nom;
-        auth.prenom = prenom;
-        auth.telephone = telephone;
-        auth.pays = pays;
-        auth.rue = rue;
-        auth.numero_rue = numero_rue;
-        auth.code_postal = code_postal;
-        auth.ville = ville;
-        auth.numeroSecuriteSocial = numeroSecuriteSocial;
-        auth.sexe = sexe;
-        auth.cni = cni;
-        auth.facture = facture;
-        auth.contactReferent = contactReferent;
-    
-        const token = jwt.sign({
-            id_user: auth._id,
-            roles_user : auth.role , 
-            email_user : auth.email
-        }, process.env.JWT_SECRET, { expiresIn: '8784h' });
-    
-        auth.token = token; 
-    
-        const authSave = await auth.save();
-    
-        return message.response(res, message.updateObject('Users') ,  201,{
-            user : authSave,
-            token ,
-        } );
+            if (UserEmailF) {
+                return message.response(res , message.error() , 400 , 'Email déjàs utilisées ');
+            }
+        
+            const UserEmailS = await authModel.findOne({
+                email : req.body.numeroSecuriteSocial
+            }).exec();
+        
+            if (UserEmailS) {
+                return message.response(res , message.error() , 402 , 'Numéro sécurité social déjàs utilisées ');
+            }
+        
+            let {
+                typeAbonnement,
+                username,
+                email,
+                password,
+                role,
+                profile,
+                nom,
+                prenom,
+                telephone,
+                pays,
+                rue,
+                numero_rue,
+                code_postal,
+                ville,
+                numeroSecuriteSocial,
+                sexe,
+                cni,
+                facture,
+                contactReferent,
+            } = req.body;
+            
+            const auth = authModel() ;
+        
+            const passwordCrypt = bcrytjs.hashSync(password, salt);
+        
+            auth.typeAbonnement = typeAbonnement;
+            auth.username = username;
+            auth.email = email;
+            auth.password = passwordCrypt;
+            auth.role = role;
+            auth.profile = profile;
+            auth.nom = nom;
+            auth.prenom = prenom;
+            auth.telephone = telephone;
+            auth.pays = pays;
+            auth.rue = rue;
+            auth.numero_rue = numero_rue;
+            auth.code_postal = code_postal;
+            auth.ville = ville;
+            auth.numeroSecuriteSocial = numeroSecuriteSocial;
+            auth.sexe = sexe;
+            auth.cni = cni;
+            auth.facture = facture;
+            auth.contactReferent = contactReferent;
+        
+            const token = jwt.sign({
+                id_user: auth._id,
+                roles_user : auth.role , 
+                email_user : auth.email
+            }, process.env.JWT_SECRET, { expiresIn: '8784h' });
+        
+            auth.token = token; 
+        
+            const authSave = await auth.save();
+        
+            return message.response(res, message.updateObject('Users') ,  201,{
+                user : authSave,
+                token ,
+            } );
+        } else {
+            if (UserEmailF) {
+                return message.response(res , message.error() , 403 , 'Email pas bon ');
+            }
+        
+        }
+
+        
 
     
     } catch (error) {

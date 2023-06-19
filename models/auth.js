@@ -31,6 +31,11 @@ const UserModel = new Schema({
         type: String,
     },
 
+    dateNaiss: {
+        type: String,
+        default :"2023-06-09T22:13:37.111+00:00"
+    },
+
     passwords : {
         type : Array
     },
