@@ -44,60 +44,69 @@ exports.forgetPassword =  async (req,res ,next) => {
 
     let {email} = req.body;
 
+    const verif= await veriffMAil.validate(email);
 
-    const user = await authModel.findOne({
-        email : email,
-    }).exec();
+    if (verif.valid) {
+        const user = await authModel.findOne({
+            email : email,
+        }).exec();
+        
+        if (user) {
+            const min = 1000000;
     
-    if (user) {
-        const min = 1000000;
-
-        const max = 9999990;
-    
-        const num = Math.floor(Math.random() * (max - min + 1)) + min;
-    
-    
-        // Configurer le transporteur SMTP
-        const transporter = nodemailer.createTransport({
-        service: 'SMTP',
-        host: 'smtp.ionos.fr', // 'ssl0.ovh.net',
-        port: 465,
-        secure: true, // Utilisez true si vous utilisez SSL/TLS
-        auth: {
-            user: 'admin@cds-toubaouest.fr',
-            pass: 'Pf@19581982'
+            const max = 9999990;
+        
+            const num = Math.floor(Math.random() * (max - min + 1)) + min;
+        
+        
+            // Configurer le transporteur SMTP
+            const transporter = nodemailer.createTransport({
+            service: 'SMTP',
+            host: 'smtp.ionos.fr', // 'ssl0.ovh.net',
+            port: 465,
+            secure: true, // Utilisez true si vous utilisez SSL/TLS
+            auth: {
+                user: 'admin@cds-toubaouest.fr',
+                pass: 'Pf@19581982'
+            }
+            });
+            
+                codeT =  codeEmail();
+                codeT.code = num.toString();
+                codeT.email = email ;
+            
+                codeF =await codeT.save();
+            
+            // Définir les informations de l'e-mail
+            const mailOptions = {
+            from: 'admin@cds-toubaouest.fr',
+            to: email,
+            subject:  'Code de vérification mailling cds-touba',
+            html: `votre code de verification est le : <strong>${num}</strong> .`
+            };
+            
+            // Envoyer l'e-mail
+            transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
+                return  message.response(res , message.error() ,404 , error);
+            
+            } else {
+                console.log('E-mail envoyé avec succès:', info.response);
+                return message.response(res, message.createObject('Code') ,  200 ,{ "code"  : 'envovez' } );
+            
+            }
+            });
+        }else {
+            return  message.response(res , message.error() ,404 , "email n'existe pas");
         }
-        });
+    } else {
+        return message.response(res , message.error() , 403 , 'Email pas bon ');
         
-            codeT =  codeEmail();
-            codeT.code = num.toString();
-            codeT.email = email ;
-        
-            codeF =await codeT.save();
-        
-        // Définir les informations de l'e-mail
-        const mailOptions = {
-        from: 'admin@cds-toubaouest.fr',
-        to: email,
-        subject:  'Code de vérification mailling cds-touba',
-        html: `votre code de verification est le : <strong>${num}</strong> .`
-        };
-        
-        // Envoyer l'e-mail
-        transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
-            return  message.response(res , message.error() ,404 , error);
-        
-        } else {
-            console.log('E-mail envoyé avec succès:', info.response);
-            return message.response(res, message.createObject('Code') ,  200 ,{ "code"  : 'envovez' } );
-        
-        }
-        });
-    }else {
-        return  message.response(res , message.error() ,404 , "email n'existe pas");
     }
+
+
+   
 
    
     
