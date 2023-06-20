@@ -14,6 +14,11 @@ const veriffMAil = require('deep-email-validator');
 const message  =  require('../utils/message');
 const codeEmail = require('../models/code-email');
 
+const kickbox = require('kickbox').client(process.env.KEYKICKBOX).kickbox();
+
+const axios = require('axios');
+
+
 require('dotenv').config({
     path: './.env'
 });
@@ -40,13 +45,38 @@ const objectPopulate = [
     }
 ];
 
+exports.verifffMail = async(req,res,next) =>{
+    let {email} = req.body;
+
+    // kickbox.verify(email, function (err, response) {
+    //     // Let's see some results
+    //     console.log(response.body);
+    //     return message.response(res , message.error() , 200 , response.body);
+
+    //   });
+
+
+    const response = await axios.get(`https://emailvalidation.abstractapi.com/v1/?api_key=1254286572544ca1a34ff96dd6dca0be&email=${email}`);
+       
+
+        if(response.data['deliverability']=='DELIVERABLE') {
+            return message.response(res , message.createObject('Email') , 200 , response.data);
+        }else {
+            return  message.response(res , message.error() ,404 , "email n'existe pas");
+        }
+
+
+
+}
+
 exports.forgetPassword =  async (req,res ,next) => {
 
     let {email} = req.body;
+    
+    const response = await axios.get(`https://emailvalidation.abstractapi.com/v1/?api_key=1254286572544ca1a34ff96dd6dca0be&email=${email}`);
+       
 
-    const verif= await veriffMAil.validate(email);
-
-    if (verif.valid) {
+    if(response.data['deliverability']=='DELIVERABLE') {
         const user = await authModel.findOne({
             email : email,
         }).exec();
@@ -100,9 +130,10 @@ exports.forgetPassword =  async (req,res ,next) => {
         }else {
             return  message.response(res , message.error() ,404 , "email n'existe pas");
         }
+
+     
     } else {
-        return message.response(res , message.error() , 403 , 'Email pas bon ');
-        
+        return  message.response(res , message.error() ,404 , "email n'existe pas");
     }
 
 
@@ -164,10 +195,9 @@ exports.store = async (req , res , next) => {
 
     try {
 
-        const verif= await veriffMAil.validate(req.body.email);
-    
-        if (verif.valid) {
-            
+        const response = await axios.get(`https://emailvalidation.abstractapi.com/v1/?api_key=1254286572544ca1a34ff96dd6dca0be&email=${email}`);
+
+        if(response.data['deliverability']=='DELIVERABLE') {
             const UserEmailF = await authModel.findOne({
                 email : req.body.email
             }).exec();
@@ -246,9 +276,11 @@ exports.store = async (req , res , next) => {
                 user : authSave,
                 token ,
             } );
-        } else {
+        }else {
             return message.response(res , message.error() , 403 , 'Email pas bon ');
+
         }
+        
 
         
 
