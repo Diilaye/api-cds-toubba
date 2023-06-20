@@ -157,7 +157,9 @@ exports.store = async (req , res , next) => {
 
 
 
+    
 
+    
 
 
     try {
@@ -165,6 +167,7 @@ exports.store = async (req , res , next) => {
         const verif= await veriffMAil.validate(req.body.email);
     
         if (verif.valid) {
+            
             const UserEmailF = await authModel.findOne({
                 email : req.body.email
             }).exec();
@@ -174,7 +177,7 @@ exports.store = async (req , res , next) => {
             }
         
             const UserEmailS = await authModel.findOne({
-                email : req.body.numeroSecuriteSocial
+                numeroSecuriteSocial : req.body.numeroSecuriteSocial
             }).exec();
         
             if (UserEmailS) {
@@ -244,10 +247,7 @@ exports.store = async (req , res , next) => {
                 token ,
             } );
         } else {
-            if (UserEmailF) {
-                return message.response(res , message.error() , 403 , 'Email pas bon ');
-            }
-        
+            return message.response(res , message.error() , 403 , 'Email pas bon ');
         }
 
         

@@ -98,6 +98,7 @@ const UserModel = new Schema({
 
     numeroSecuriteSocial  : {
         type : String,
+        required : true,
         unique : true
     },
 
