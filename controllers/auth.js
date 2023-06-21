@@ -58,7 +58,9 @@ exports.verifMail = async(req,res,next) =>{
 
 
     const response = await axios.get(`https://emailvalidation.abstractapi.com/v1/?api_key=1254286572544ca1a34ff96dd6dca0be&email=${email}`);
-       
+
+    console.log(response.data);
+    
 
         if(response.data['deliverability']=='DELIVERABLE') {
 
@@ -288,6 +290,39 @@ exports.store = async (req , res , next) => {
             auth.token = token; 
         
             const authSave = await auth.save();
+
+              // Configurer le transporteur SMTP
+              const transporter = nodemailer.createTransport({
+                service: 'SMTP',
+                host: 'smtp.ionos.fr', // 'ssl0.ovh.net',
+                port: 465,
+                secure: true, // Utilisez true si vous utilisez SSL/TLS
+                auth: {
+                    user: 'admin@cds-toubaouest.fr',
+                    pass: 'Pf@19581982'
+                }
+                });
+                
+                   
+                
+                // Définir les informations de l'e-mail
+                const mailOptions = {
+                from: 'admin@cds-toubaouest.fr',
+                to: email,
+                subject:  'création de votre compte cds',
+                html: `Bonjour,</br>votre compte viens d'être créé vous allez être notifié une fois votre adhésion évolue.</br></br>Cordialement,</br>L’équipe caisse de solidarité toubaouest`
+                };
+                
+                // Envoyer l'e-mail
+                transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
+                
+                } else {
+                    console.log('E-mail envoyé avec succès:', info.response);
+                
+                }
+                });
         
             return message.response(res, message.updateObject('Users') ,  201,{
                 user : authSave,
