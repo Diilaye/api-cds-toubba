@@ -45,8 +45,9 @@ const objectPopulate = [
     }
 ];
 
-exports.verifffMail = async(req,res,next) =>{
-    let {email} = req.body;
+exports.verifMail = async(req,res,next) =>{
+    try {
+        let {email} = req.body;
 
     // kickbox.verify(email, function (err, response) {
     //     // Let's see some results
@@ -60,10 +61,25 @@ exports.verifffMail = async(req,res,next) =>{
        
 
         if(response.data['deliverability']=='DELIVERABLE') {
-            return message.response(res , message.createObject('Email') , 200 , response.data);
+
+            const auth = await authModel.findOne({
+                email : email
+            }).exec();
+
+            if (auth) {
+            return message.response(res , message.error() , 403 , 'Email existte déjas');
+                
+            }else {
+                return message.response(res , message.createObject('Email') , 200 , "Email valid");
+            }
+
         }else {
             return  message.response(res , message.error() ,404 , "email n'existe pas");
         }
+    } catch (error) {
+        return  message.response(res , message.error() ,404 , error);
+        
+    }   
 
 
 
