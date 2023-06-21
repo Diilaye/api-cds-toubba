@@ -486,13 +486,13 @@ exports.update = async (req, res ,next ) => {
                 // Définir les informations de l'e-mail
                 const mailOptions = {
                 from: 'admin@cds-toubaouest.fr',
-                to: email,
-                subject:  'Code de vérification mailling cds-touba',
+                to: auth.email,
+                subject:  'Validification compte cds-touba',
                 html: `votre compte viens d'être <strong>${req.body.active}</strong>  allez vous conecter sur le lien <strong> <a href ="https://cds-toubaouest.fr/#/">ci-aprés</a></strong> .`
                 };
                 
                 // Envoyer l'e-mail
-                transporter.sendMail(mailOptions, (error, info) => {
+               await  transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
                     console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
                 
@@ -611,7 +611,7 @@ exports.update = async (req, res ,next ) => {
     
         return message.response(res, message.updateObject('Users')  , 200,{token , phone : auth.phone , role : auth.role , user:Uf  });
     
-        
+    
     } catch (error) {
        
        return  message.response(res , message.error() ,404 , error);
