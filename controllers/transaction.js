@@ -82,14 +82,14 @@ exports.store = async  (req,res,next) => {
                     "items": [{
                         "name": "Abonnement annuelle",
                         "sku": "item-annee",
-                        "price": amount,
+                        "price": "1",
                         "currency": "EUR",
                         "quantity": 1
                     }]
                 },
                 "amount": {
                     "currency": "EUR",
-                    "total": amount
+                    "total": "1"
                 },
                 "description": "Description des avantages de cette abonnements."
             }]
