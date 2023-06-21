@@ -313,7 +313,51 @@ exports.all= async (req,res ,next) => {
 
 
 exports.auth = async  ( req, res ,_ ) => {
+
+    console.log(req.body);
     
+    if(req.body.email != undefined) {
+
+        const user = await authModel.findOne({
+            email : req.body.email
+
+        }).populate(objectPopulate).exec();
+
+        console.log('user',user);
+        
+
+        if (user) {
+            if (bcrytjs.compareSync(req.body.password, user.password)) {
+                const token = jwt.sign({
+                    id_user: user.id,
+                    role_user : user.role , 
+                    phone_user : user.phone
+                }, process.env.JWT_SECRET, { expiresIn: '8784h' });
+                user.token = token  ;
+                await  user.save();
+                return res.json({
+                    message: 'Connection réussssi',
+                    status: 'OK',
+                    data: {
+                        user : user ,
+                        token : token
+                    },
+                    statusCode: 200
+                });
+            } else {
+                return res.status(401).json({
+                    message: 'Identifiant  Incorrect',
+                    status: 'NOT OK',
+                    data:  "error identifiant",
+                    statusCode: 401
+                });
+            }
+        } else {
+           return message.response(res , message.error() ,404 , "Identifiant  Incorrect");
+        }
+        
+        
+    }
    try {
     if(req.body.email != undefined) {
 
@@ -424,6 +468,39 @@ exports.update = async (req, res ,next ) => {
         if (req.body.active !=undefined) {
             
             auth.active = req.body.active ;
+
+            // Configurer le transporteur SMTP
+            const transporter = nodemailer.createTransport({
+                service: 'SMTP',
+                host: 'smtp.ionos.fr', // 'ssl0.ovh.net',
+                port: 465,
+                secure: true, // Utilisez true si vous utilisez SSL/TLS
+                auth: {
+                    user: 'admin@cds-toubaouest.fr',
+                    pass: 'Pf@19581982'
+                }
+                });
+                
+                    
+                
+                // Définir les informations de l'e-mail
+                const mailOptions = {
+                from: 'admin@cds-toubaouest.fr',
+                to: email,
+                subject:  'Code de vérification mailling cds-touba',
+                html: `votre compte viens d'être <strong>${req.body.active}</strong>  allez vous conecter sur le lien <strong> <a href ="https://cds-toubaouest.fr/#/">ci-aprés</a></strong> .`
+                };
+                
+                // Envoyer l'e-mail
+                transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
+                
+                } else {
+                    console.log('E-mail envoyé avec succès:', info.response);
+                
+                }
+                });
     
         }
     
