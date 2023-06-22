@@ -8,7 +8,7 @@ const salt = bcrytjs.genSaltSync(10);
 const jwt = require('jsonwebtoken');
 
 const nodemailer = require('nodemailer');
-
+const hbs = require('nodemailer-express-handlebars');
 const veriffMAil = require('deep-email-validator');
 
 const message  =  require('../utils/message');
@@ -303,6 +303,11 @@ exports.store = async (req , res , next) => {
                 }
                 });
                 
+
+                transporter.use('compile' , hbs({
+                    viewEngine :'express-handlebars',
+                    viewPath : '../views'
+                }))
                    
                 
                 // Définir les informations de l'e-mail
@@ -310,7 +315,7 @@ exports.store = async (req , res , next) => {
                 from: 'admin@cds-toubaouest.fr',
                 to: email,
                 subject:  'création de votre compte cds',
-                html: `Bonjour,</br>votre compte viens d'être créé vous allez être notifié une fois votre adhésion évolue.</br></br>Cordialement,</br>L’équipe caisse de solidarité toubaouest`
+                template :'index'
                 };
                 
                 // Envoyer l'e-mail
@@ -467,7 +472,7 @@ exports.findAuth = async (req , res, _ ) =>  {
 
     const user = await authModel.findById(req.user.id_user).populate(objectPopulate).exec();
 
-    return message.response(res, message.updateObject('Users') ,  200,{ user  } );
+    return message.response(res, message.findObject('Users') ,  200,{ user  } );
 
 
 }
