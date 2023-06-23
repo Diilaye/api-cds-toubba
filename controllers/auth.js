@@ -19,6 +19,9 @@ const kickbox = require('kickbox').client(process.env.KEYKICKBOX).kickbox();
 const axios = require('axios');
 
 
+const emailExistence = require('email-existence');
+
+
 require('dotenv').config({
     path: './.env'
 });
@@ -46,8 +49,12 @@ const objectPopulate = [
 ];
 
 exports.verifMail = async(req,res,next) =>{
+
+
+    
     try {
-        let {email} = req.body;
+
+    let {email} = req.body;
 
     // kickbox.verify(email, function (err, response) {
     //     // Let's see some results
@@ -56,28 +63,36 @@ exports.verifMail = async(req,res,next) =>{
 
     //   });
 
+    emailExistence.check(email, function(error, response){
+        console.log('res: '+response);
+    });
 
-    const response = await axios.get(`https://emailvalidation.abstractapi.com/v1/?api_key=1254286572544ca1a34ff96dd6dca0be&email=${email}`);
+    const auth = await authModel.findOne({
+        email : email
+    }).exec();
 
-    console.log(response.data);
+    if (auth) {
+    return message.response(res , message.error() , 403 , 'Email existe déjas');
+        
+    }else {
+        return message.response(res , message.createObject('Email') , 200 , "Email valid");
+    }
+
+
+    // const response = await axios.get(`https://emailvalidation.abstractapi.com/v1/?api_key=1254286572544ca1a34ff96dd6dca0be&email=${email}`);
+
+    // console.log(response.data);
     
 
-        if(response.data['deliverability']=='DELIVERABLE') {
+    //     if(response.data['deliverability']=='DELIVERABLE') {
 
-            const auth = await authModel.findOne({
-                email : email
-            }).exec();
+          
 
-            if (auth) {
-            return message.response(res , message.error() , 403 , 'Email existte déjas');
-                
-            }else {
-                return message.response(res , message.createObject('Email') , 200 , "Email valid");
-            }
+    //     }else {
+    //         return  message.response(res , message.error() ,404 , "email n'existe pas");
+    //     }
 
-        }else {
-            return  message.response(res , message.error() ,404 , "email n'existe pas");
-        }
+   
     } catch (error) {
         return  message.response(res , message.error() ,404 , error);
         
@@ -214,129 +229,131 @@ exports.store = async (req , res , next) => {
 
     try {
 
-        const response = await axios.get(`https://emailvalidation.abstractapi.com/v1/?api_key=1254286572544ca1a34ff96dd6dca0be&email=${req.body.email}`);
+        // const response = await axios.get(`https://emailvalidation.abstractapi.com/v1/?api_key=1254286572544ca1a34ff96dd6dca0be&email=${req.body.email}`);
 
-        if(response.data['deliverability']=='DELIVERABLE') {
-            const UserEmailF = await authModel.findOne({
-                email : req.body.email
-            }).exec();
-        
-            if (UserEmailF) {
-                return message.response(res , message.error() , 400 , 'Email déjàs utilisées ');
-            }
-        
-            const UserEmailS = await authModel.findOne({
-                numeroSecuriteSocial : req.body.numeroSecuriteSocial
-            }).exec();
-        
-            if (UserEmailS) {
-                return message.response(res , message.error() , 402 , 'Numéro sécurité social déjàs utilisées ');
-            }
-        
-            let {
-                typeAbonnement,
-                username,
-                email,
-                password,
-                role,
-                profile,
-                nom,
-                prenom,
-                telephone,
-                pays,
-                rue,
-                numero_rue,
-                code_postal,
-                ville,
-                numeroSecuriteSocial,
-                sexe,
-                cni,
-                facture,
-                contactReferent,
-                dateNaiss
-            } = req.body;
+        // if(response.data['deliverability']=='DELIVERABLE') {
+
             
-            const auth = authModel() ;
-        
-            const passwordCrypt = bcrytjs.hashSync(password, salt);
-        
-            auth.typeAbonnement = typeAbonnement;
-            auth.dateNaiss = dateNaiss;
-            auth.username = username;
-            auth.email = email;
-            auth.password = passwordCrypt;
-            auth.role = role;
-            auth.profile = profile;
-            auth.nom = nom;
-            auth.prenom = prenom;
-            auth.telephone = telephone;
-            auth.pays = pays;
-            auth.rue = rue;
-            auth.numero_rue = numero_rue;
-            auth.code_postal = code_postal;
-            auth.ville = ville;
-            auth.numeroSecuriteSocial = numeroSecuriteSocial;
-            auth.sexe = sexe;
-            auth.cni = cni;
-            auth.facture = facture;
-            auth.contactReferent = contactReferent;
-        
-            const token = jwt.sign({
-                id_user: auth._id,
-                roles_user : auth.role , 
-                email_user : auth.email
-            }, process.env.JWT_SECRET, { expiresIn: '8784h' });
-        
-            auth.token = token; 
-        
-            const authSave = await auth.save();
-
-              // Configurer le transporteur SMTP
-              const transporter = nodemailer.createTransport({
-                service: 'SMTP',
-                host: 'smtp.ionos.fr', // 'ssl0.ovh.net',
-                port: 465,
-                secure: true, // Utilisez true si vous utilisez SSL/TLS
-                auth: {
-                    user: 'admin@cds-toubaouest.fr',
-                    pass: 'Pf@19581982'
-                }
-                });
-                
-
-                transporter.use('compile' , hbs({
-                    viewEngine :'express-handlebars',
-                    viewPath : '../views'
-                }))
-                   
-                
-                // Définir les informations de l'e-mail
-                const mailOptions = {
-                from: 'admin@cds-toubaouest.fr',
-                to: email,
-                subject:  'création de votre compte cds',
-                template :'index'
-                };
-                
-                // Envoyer l'e-mail
-                transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
-                
-                } else {
-                    console.log('E-mail envoyé avec succès:', info.response);
-                
-                }
-                });
-        
-            return message.response(res, message.updateObject('Users') ,  201,{
-                user : authSave,
-                token ,
-            } );
-        }else {
-            return message.response(res , message.error() , 403 , 'Email pas bon ');
+        // }else {
+        //     return message.response(res , message.error() , 403 , 'Email pas bon ');
     
+        // }
+
+        const UserEmailF = await authModel.findOne({
+            email : req.body.email
+        }).exec();
+    
+        if (UserEmailF) {
+            return message.response(res , message.error() , 400 , 'Email déjàs utilisées ');
         }
+    
+        const UserEmailS = await authModel.findOne({
+            numeroSecuriteSocial : req.body.numeroSecuriteSocial
+        }).exec();
+    
+        if (UserEmailS) {
+            return message.response(res , message.error() , 402 , 'Numéro sécurité social déjàs utilisées ');
+        }
+    
+        let {
+            typeAbonnement,
+            username,
+            email,
+            password,
+            role,
+            profile,
+            nom,
+            prenom,
+            telephone,
+            pays,
+            rue,
+            numero_rue,
+            code_postal,
+            ville,
+            numeroSecuriteSocial,
+            sexe,
+            cni,
+            facture,
+            contactReferent,
+            dateNaiss
+        } = req.body;
+        
+        const auth = authModel() ;
+    
+        const passwordCrypt = bcrytjs.hashSync(password, salt);
+    
+        auth.typeAbonnement = typeAbonnement;
+        auth.dateNaiss = dateNaiss;
+        auth.username = username;
+        auth.email = email;
+        auth.password = passwordCrypt;
+        auth.role = role;
+        auth.profile = profile;
+        auth.nom = nom;
+        auth.prenom = prenom;
+        auth.telephone = telephone;
+        auth.pays = pays;
+        auth.rue = rue;
+        auth.numero_rue = numero_rue;
+        auth.code_postal = code_postal;
+        auth.ville = ville;
+        auth.numeroSecuriteSocial = numeroSecuriteSocial;
+        auth.sexe = sexe;
+        auth.cni = cni;
+        auth.facture = facture;
+        auth.contactReferent = contactReferent;
+    
+        const token = jwt.sign({
+            id_user: auth._id,
+            roles_user : auth.role , 
+            email_user : auth.email
+        }, process.env.JWT_SECRET, { expiresIn: '8784h' });
+    
+        auth.token = token; 
+    
+        const authSave = await auth.save();
+
+          // Configurer le transporteur SMTP
+          const transporter = nodemailer.createTransport({
+            service: 'SMTP',
+            host: 'smtp.ionos.fr', // 'ssl0.ovh.net',
+            port: 465,
+            secure: true, // Utilisez true si vous utilisez SSL/TLS
+            auth: {
+                user: 'admin@cds-toubaouest.fr',
+                pass: 'Pf@19581982'
+            }
+            });
+            
+
+            transporter.use('compile' , hbs({
+                viewEngine :'express-handlebars',
+                viewPath : '../views'
+            }))
+               
+            
+            // Définir les informations de l'e-mail
+            const mailOptions = {
+            from: 'admin@cds-toubaouest.fr',
+            to: email,
+            subject:  'création de votre compte cds',
+            template :'index'
+            };
+            // Envoyer l'e-mail
+            transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
+            
+            } else {
+                console.log('E-mail envoyé avec succès:', info.response);
+            
+            }
+            });
+    
+        return message.response(res, message.updateObject('Users') ,  201,{
+            user : authSave,
+            token ,
+        } );
         
 
     
