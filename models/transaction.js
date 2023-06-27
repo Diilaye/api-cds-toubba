@@ -29,7 +29,8 @@ const transactionModel = new Schema({
     },
 
     dateTransactionSuccess: {
-        type: Date,
+        type: String,
+        default : ""
     },
 },{
     toJSON: {

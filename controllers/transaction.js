@@ -1,3 +1,4 @@
+const DateTime = require("node-datetime/src/datetime");
 const authModel = require("../models/auth");
 const transactionModel = require("../models/transaction");
 
@@ -19,6 +20,8 @@ exports.success = async (req, res ,next )=> {
     }).exec();
 
     transaction.status = "SUCCESS";
+
+    transaction.dateTransactionSuccess = new Date().toISOString().split('T')[0];
     
 
     await transaction.save();
