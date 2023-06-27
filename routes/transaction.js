@@ -10,6 +10,7 @@ const routes = new express.Router();
 
 // Add routes
 routes.get('/', auth,transactionCtrl.all);
+routes.get('/allByUser', auth,transactionCtrl.allByUser);
 routes.get('/success',transactionCtrl.success);
 routes.get('/failled',transactionCtrl.failled);
 routes.get('/:id', auth, transactionCtrl.one);

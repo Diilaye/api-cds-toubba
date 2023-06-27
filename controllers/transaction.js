@@ -13,11 +13,31 @@ const populateObject = [{
 
 
 exports.success = async (req, res ,next )=> {
-    res.send(req.params);
+
+    const transaction = transactionModel.findOne({
+        ref : req.queyr.idTranssaction
+    }).exec();
+
+    transaction.status = "SUCCESS";
+    
+
+    await transaction.save();
+
+    res.send("<script>window.close();</script>");
+
 }
 
 exports.failled  = async (req, res ,next )=> {
-    res.send(req.params);
+    const transaction = transactionModel.findOne({
+        ref : req.queyr.idTranssaction
+    }).exec();
+
+    transaction.status = "CANCELED";
+    
+
+    await transaction.save();
+
+    res.send("<script>window.close();</script>");
     
 }
 
@@ -187,6 +207,22 @@ exports.delete = async (req,res ,next) =>  {
         const rows  = contactFind.delete();
 
        return message.response(res,message.deleteObject('Transaction'),200,rows);
+
+    } catch (error) {
+        return message.response(res, message.error(),404,error); 
+    }
+}
+
+exports.allByUser = async (req,res, next) => {
+    try {
+        
+        const transactionFind = await transactionModel.find(
+            {
+                user : req.user.id_user
+            }
+        ).exec();
+
+       return message.response(res,message.findObject('Transaction'),200,transactionFind);
 
     } catch (error) {
         return message.response(res, message.error(),404,error); 
