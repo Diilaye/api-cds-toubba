@@ -87,8 +87,8 @@ exports.store = async  (req,res,next) => {
             
         paypal.configure({
             'mode': 'live', //sandbox or live
-            'client_id': 'AaRXqqFDXAFnjhC-vtaFFuDao5bviNZ6CG_Q1WH9zrVsyZ7bsgcuBNgfhvKjwNwN3nQrFhCcK3Qbfwf4',
-            'client_secret': 'ECBo9XoCEgiih56Z-5Q8crMPX2HWAm_-kYajpRd8A9KhW6lzvABMCm3sOmQhYjv2InzpDwS2QfZgFgEC'
+            'client_id': 'AUrkmKQitaIycR_ZFEDmXjrmEva-gc55HJpofRtOm_r_4F0Ff8EKr7ig6I5H_P4KfTWuGVkEjtkM9oWl',
+            'client_secret': 'ECSYqn8gkFgaSTLDT7Ra11MJfDgglvXJlM4g1Pk4zBCEd-47xEKq1qekYU3L0zPY-Bdjoxcx7IXnqxxc'
           });
     
           var create_payment_json = {
