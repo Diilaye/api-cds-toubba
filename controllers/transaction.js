@@ -114,9 +114,8 @@ exports.store = async  (req,res,next) => {
                 "payment_method": "paypal"
             },
             "redirect_urls": {
-                // "return_url": "https://api.cds-toubaouest.fr/v1/api/transactions/success",
-                "return_url": "http://localhost:5600/v1/api/transactions/success",
-                "cancel_url": "http://localhost:5600/v1/api/transactions/failled"
+                "return_url": "https://api.cds-toubaouest.fr/v1/api/transactions/success",
+                "cancel_url": "https://api.cds-toubaouest.fr/v1/api/transactions/failled"
             },
             "transactions": [{
                 "item_list": {
