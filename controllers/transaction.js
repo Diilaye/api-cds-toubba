@@ -16,7 +16,7 @@ const populateObject = [{
 exports.success = async (req, res ,next )=> {
 
     const transaction = await transactionModel.findOne({
-        TOKEN : req.query.token
+        token : req.query.token
     }).exec();
 
     transaction.status = "SUCCESS";
@@ -36,7 +36,7 @@ exports.success = async (req, res ,next )=> {
 
 exports.failled  = async (req, res ,next )=> {
     const transaction = await transactionModel.findOne({
-        TOKEN : req.query.token
+        token : req.query.token
     }).exec();
 
     transaction.status = "CANCELED";
