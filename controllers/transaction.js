@@ -15,6 +15,7 @@ const populateObject = [{
   
 
 exports.success = async (req, res ,next )=> {
+    console.log(req.query);
 
     const payerId = req.query.PayerID;
     const paymentId = req.query.paymentId;
@@ -57,7 +58,7 @@ exports.success = async (req, res ,next )=> {
         
     
     
-        res.send('<script>window.close();</script>');
+        res.sendFile(__dirname + "/success.html")
       }
     });
 
@@ -81,7 +82,7 @@ exports.failled  = async (req, res ,next )=> {
     console.log(tf);
 
 
-    res.send('<script>window.close();</script>');
+    res.sendFile(__dirname + "/error.html")
     
 }
 
@@ -113,8 +114,9 @@ exports.store = async  (req,res,next) => {
                 "payment_method": "paypal"
             },
             "redirect_urls": {
-                "return_url": "https://api.cds-toubaouest.fr/v1/api/transactions/success",
-                "cancel_url": "https://api.cds-toubaouest.fr/v1/api/transactions/failled"
+                // "return_url": "https://api.cds-toubaouest.fr/v1/api/transactions/success",
+                "return_url": "http://localhost:5600/v1/api/transactions/success",
+                "cancel_url": "http://localhost:5600/v1/api/transactions/failled"
             },
             "transactions": [{
                 "item_list": {
