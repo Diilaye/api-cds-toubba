@@ -1,7 +1,7 @@
 const DateTime = require("node-datetime/src/datetime");
 const authModel = require("../models/auth");
 const transactionModel = require("../models/transaction");
-
+const path = require('path');
 const orderid = require('order-id')('diikaanedevZakat');
 
 const message = require('../utils/message');
@@ -15,43 +15,46 @@ const populateObject = [{
 
 exports.success = async (req, res ,next )=> {
 
-    const transaction = transactionModel.findOne({
-        ref : req.queyr.idTranssaction
+    const transaction = await transactionModel.findOne({
+        TOKEN : req.query.token
     }).exec();
 
     transaction.status = "SUCCESS";
-
-    transaction.dateTransactionSuccess = new Date().toISOString().split('T')[0];
     
 
-    await transaction.save();
+    transaction.dateTransactionSuccess = new Date().toISOString().split('T')[0];
 
-    res.send("<script>window.close();</script>");
+
+   const tf = await transaction.save();
+
+    console.log(tf);
+
+
+    res.send('<script>window.close();</script>');
 
 }
 
 exports.failled  = async (req, res ,next )=> {
-    const transaction = transactionModel.findOne({
-        ref : req.queyr.idTranssaction
+    const transaction = await transactionModel.findOne({
+        TOKEN : req.query.token
     }).exec();
 
     transaction.status = "CANCELED";
     
 
-    await transaction.save();
+    transaction.dateTransactionSuccess = new Date().toISOString().split('T')[0];
 
-    res.send("<script>window.close();</script>");
+
+   const tf = await transaction.save();
+
+    console.log(tf);
+
+
+    res.send('<script>window.close();</script>');
     
 }
 
 exports.store = async  (req,res,next) => {
-
-
-    
-
-    
-           
-    
 
     try {
 
@@ -71,25 +74,7 @@ exports.store = async  (req,res,next) => {
     
         
     
-        const transaction = transactionModel();
-    
-        const ref = orderid.generate();
-            
-            
-        transaction.reference =  ref;
-    
-        transaction.user  = req.user.id_user;
-    
-        transaction.amount  = amount;
-    
-        const  transactionSave = await transaction.save();
-    
-            
-        paypal.configure({
-            'mode': 'live', //sandbox or live
-            'client_id': 'AUyqnOC37-dAeF8V4Q9h38MilGty1sa0yaD0fTq6FfK9fobWaF3TzHEEM89wS0QuKOjsW1UVZhsciiQm',
-            'client_secret': 'EPH_fnApZeS60sXHjraVaR3W_1Cw52SMCjTl__JPW3JM0KiumRYcq10rQMO4_IqgONAuWxfZnzsrru0P'
-          });
+       
     
           var create_payment_json = {
             "intent": "sale",
@@ -97,8 +82,8 @@ exports.store = async  (req,res,next) => {
                 "payment_method": "paypal"
             },
             "redirect_urls": {
-                "return_url": "https://api.cds-toubaouest.fr/v1/api/transactions/success?idTranssaction="+ref,
-                "cancel_url": "https://api.cds-toubaouest.fr/v1/api/transactions/failled?idTranssaction="+ref
+                "return_url": "http://localhost:5600/v1/api/transactions/success",
+                "cancel_url": "http://localhost:5600/v1/api/transactions/failled"
             },
             "transactions": [{
                 "item_list": {
@@ -118,10 +103,26 @@ exports.store = async  (req,res,next) => {
             }]
         };
         
-        paypal.payment.create(create_payment_json, function (error, payment)  {
+        paypal.payment.create(create_payment_json, async (error, payment)  => {
             if (error) {
                 throw error;
             } else {
+                const transaction = transactionModel();
+    
+                const ref = orderid.generate();
+                    
+                    
+                transaction.reference =  ref;
+            
+                transaction.user  = req.user.id_user;
+            
+                transaction.amount  = amount;
+
+                transaction.token  = payment['links'][1]['href'].split('token=')[1];
+            
+                const  transactionSave = await transaction.save();
+
+
                 console.log("Create Payment Response");
                 console.log(payment);
                 return message.response(res,message.createObject('Transaction'),201,{

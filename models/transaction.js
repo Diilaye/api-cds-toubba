@@ -13,7 +13,8 @@ const transactionModel = new Schema({
     },
 
     token : {
-        type : String
+        type : String,
+        unique : true
     },
 
     user : {
