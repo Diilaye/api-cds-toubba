@@ -12,25 +12,52 @@ const populateObject = [{
     path :'user'
 }];
 
+  
 
 exports.success = async (req, res ,next )=> {
 
-    const transaction = await transactionModel.findOne({
-        token : req.query.token
-    }).exec();
+    const payerId = req.query.PayerID;
+    const paymentId = req.query.paymentId;
+  
+    const execute_payment_json = {
+      payer_id: payerId,
+      transactions: [
+        {
+          amount: {
+            currency: 'USD',
+            total: '10.00'
+          }
+        }
+      ]
+    };
+  
+    paypal.payment.execute(paymentId, execute_payment_json, async (error, payment) => {
+      if (error) {
+        res.send('error');
 
-    transaction.status = "SUCCESS";
+      } else {
+        console.log('payement => ',payment);
+        
+        const transaction = await transactionModel.findOne({
+            token : req.query.token
+        }).exec();
     
+        transaction.status = "SUCCESS";
+        
+    
+        transaction.dateTransactionSuccess = new Date().toISOString().split('T')[0];
+    
+    
+       const tf = await transaction.save();
+    
+        console.log(tf);
+    
+    
+        res.send('<script>window.close();</script>');
+      }
+    });
 
-    transaction.dateTransactionSuccess = new Date().toISOString().split('T')[0];
-
-
-   const tf = await transaction.save();
-
-    console.log(tf);
-
-
-    res.send('<script>window.close();</script>');
+  
 
 }
 
