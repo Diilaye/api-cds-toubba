@@ -53,10 +53,6 @@ exports.success = async (req, res ,next )=> {
         res.send('error');
 
       } else {
-        console.log('payement => ',payment);
-        
-        
-    
     
         res.sendFile(__dirname + "/success.html")
       }
