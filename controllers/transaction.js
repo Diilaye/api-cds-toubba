@@ -40,7 +40,7 @@ exports.success = async (req, res ,next )=> {
         {
           amount: {
             "currency": "EUR",
-            "total": "1"
+            "total": transaction.amount
           }
         }
       ]
@@ -92,7 +92,7 @@ exports.store = async  (req,res,next) => {
             
         }).exec();
     
-        let amount = auth.typeAbonnement == '1' ? 45 : auth.typeAbonnement == '2' ?60 :  auth.typeAbonnement == '3' ? 80: 70;
+        let amount = auth.typeAbonnement == '1' ? 45 : auth.typeAbonnement == '2' ?60 :  auth.typeAbonnement == '3' ? 80: auth.typeAbonnement == '4' ? 70 : 60;
     
         for (const iterator of auth.partenaires) {
             if (iterator['type'] == "enfants") {
@@ -118,14 +118,14 @@ exports.store = async  (req,res,next) => {
                     "items": [{
                         "name": "Abonnement annuelle",
                         "sku": "item-annee",
-                        "price": "1",
+                        "price": amount,
                         "currency": "EUR",
-                        "quantity": 1
+                        "quantity": "1"
                     }]
                 },
                 "amount": {
                     "currency": "EUR",
-                    "total": "1"
+                    "total": amount
                 },
                 "description": "Description des avantages de cette abonnements."
             }]
