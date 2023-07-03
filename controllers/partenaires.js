@@ -49,6 +49,25 @@ exports.store = async (req, res ,next ) => {
 
     auth.partenaires.push(savePartenaires.id) ;
 
+    switch (auth.typeAbonnement) {
+        case "1":
+            auth.typeAbonnement = type == 'partenaires' ? '3' : '5';
+            break;
+        case "2":
+            auth.typeAbonnement = type == 'partenaires' ? '3' : '5';
+            break;
+        case "3":
+            auth.typeAbonnement = type == 'partenaires' ? '3' : '4';
+            break;
+        case "5":
+            auth.typeAbonnement = type == 'partenaires' ? '3' : '5';
+            break;
+        default:
+            break;
+    }
+
+   
+
     const authS = await  auth.save();
 
     return res.json({

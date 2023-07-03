@@ -325,19 +325,14 @@ exports.store = async (req , res , next) => {
             }
             });
             
-
-            transporter.use('compile' , hbs({
-                viewEngine :'express-handlebars',
-                viewPath : '../views'
-            }))
-               
             
             // Définir les informations de l'e-mail
             const mailOptions = {
             from: 'admin@cds-toubaouest.fr',
             to: email,
             subject:  'création de votre compte cds',
-            template :'index'
+            html: `votre compte viens d'être crééer  allez vous conecter sur le lien <strong> <a href ="https://cds-toubaouest.fr/#/">ci-aprés</a></strong> .`
+                
             };
             // Envoyer l'e-mail
             transporter.sendMail(mailOptions, (error, info) => {
