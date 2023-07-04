@@ -12,6 +12,11 @@ const transactionModel = new Schema({
         type : String
     },
 
+    justificatif : {
+        type : String
+    },
+
+
     token : {
         type : String,
         unique : true
@@ -27,6 +32,17 @@ const transactionModel = new Schema({
         type: String,
         enum: ['PENDING', 'SUCCESS','CANCELED'],
         default: 'PENDING'
+    },
+
+    type: {
+        type: String,
+        enum: ['en ligne', 'virement banquaire','en espseces'],
+        default: 'en ligne'
+    },
+
+    documents : {
+        type: Schema.Types.ObjectId,
+        ref: "media"
     },
 
     dateTransactionSuccess: {

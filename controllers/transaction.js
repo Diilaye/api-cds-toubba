@@ -168,6 +168,65 @@ exports.store = async  (req,res,next) => {
 
 }
 
+
+exports.storeWithActivation = async  (req,res,next) => {
+
+    try {
+
+
+        const auth = await authModel.findById(req.body.user).populate( {
+            path :'partenaires' ,
+            
+        }).exec();
+    
+        let amount = auth.typeAbonnement == '1' ? 45 : auth.typeAbonnement == '2' ?60 :  auth.typeAbonnement == '3' ? 80: auth.typeAbonnement == '4' ? 70 : 60;
+    
+        for (const iterator of auth.partenaires) {
+            if (iterator['type'] == "enfants") {
+                amount =amount + 10;
+            }
+        }
+    
+        
+        const transaction = transactionModel();
+    
+        const ref = orderid.generate();
+            
+        transaction.reference =  ref;
+    
+        transaction.user  = req.body.user;
+    
+        transaction.amount  = amount;
+
+        transaction.token  =   orderid.generate();
+
+        transaction.justificatif  =   req.body.justificatif;
+
+        transaction.documents  =   req.body.documents;
+
+        transaction.status  =   "SUCCESS";
+
+        transaction.type  =   req.body.type;
+
+        transaction.dateTransactionSuccess  =   req.body.dateTransactionSuccess;
+    
+        const  transactionSave = await transaction.save();
+       
+    
+        
+       return message.response(res,message.createObject('Transaction'),201,transactionSave);
+        
+               
+
+    } catch (error) {
+       return message.response(res, message.error(),404,error);
+        
+    }
+
+}
+
+
+
 exports.all = async (req,res,next) => {
 
     try {

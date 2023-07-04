@@ -216,16 +216,6 @@ exports.verifCodeVerif = async (req,res) => {
 
 exports.store = async (req , res , next) => {
     
-    
-   
-
-    
-    
-
-    
-
-    
-
 
     try {
 

@@ -15,6 +15,7 @@ routes.get('/success',transactionCtrl.success);
 routes.get('/failled',transactionCtrl.failled);
 routes.get('/:id', auth, transactionCtrl.one);
 routes.post('/',auth,transactionCtrl.store);
+routes.post('/actvation',auth,transactionCtrl.storeWithActivation);
 routes.delete('/:id',  auth,transactionCtrl.delete);
 
 module.exports = routes;
