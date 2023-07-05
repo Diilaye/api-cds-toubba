@@ -14,22 +14,35 @@ exports.store = async (req, res ,next ) => {
     
     const F = await  base64(req.body.image);
 
-   console.log(F['url']);
+    console.log(F);
 
-    file.url  = F['url'];
+    if ((F =='File to large')) {
+        return res.json({
+            message: 'Fichier trop volumineux ',
+            status: 'OK',
+            data: "",
+            statusCode: 404
+        })
+    }else {
+        console.log(F['url']);
 
-    file.type  = F['type'];
+        file.url  = F['url'];
     
-    // file.user = req.user.id;
+        file.type  = F['type'];
+        
+        // file.user = req.user.id;
+    
+        const saveFile = await  file.save();
+    
+        return res.json({
+            message: 'Fichier crée avec succes',
+            status: 'OK',
+            data: saveFile,
+            statusCode: 201
+        })
+    }
 
-    const saveFile = await  file.save();
-
-    return res.json({
-        message: 'Fichier crée avec succes',
-        status: 'OK',
-        data: saveFile,
-        statusCode: 201
-    })
+  
     } catch (error) {
         res.json({
             message: 'Erreur creation',

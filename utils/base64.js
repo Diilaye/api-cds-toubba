@@ -23,24 +23,37 @@ exports.base64 =  async (base) => {
         response.data = Buffer(matches[2], 'base64');
 
         let decodedImg = response;
-
-
+        
 
         let imageBuffer = decodedImg.data;
 
         let type = decodedImg.type;
 
 
+
+
         let fileName = uid.uid();
 
 
         fs.writeFileSync(path.join(__dirname,'..','uploads',fileName+'.'+type.split('/')[1]), imageBuffer, 'utf8');
+       
+        const stats = fs.statSync(path.join(__dirname,'..','uploads',fileName+'.'+type.split('/')[1]));
+        const fileSizeInBytes = stats.size / (1024 * 1024);
+      
+       if (fileSizeInBytes > 5) {
+        
+         fs.unlinkSync(path.join(__dirname,'..','uploads',fileName+'.'+type.split('/')[1]));
+        return 'File to large';
+       
+        }else {
+            return {
+                'url' : `https://api.cds-toubaouest.fr/cds-touba-file/${fileName}.${type.split('/')[1]}`,
+                'type' :type
+            };
+        }
+      
 
-
-        return {
-            'url' : `https://api.cds-toubaouest.fr/cds-touba-file/${fileName}.${type.split('/')[1]}`,
-            'type' :type
-        };
+        
 
     }
 
