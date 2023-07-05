@@ -70,7 +70,8 @@ const Partenaires = new Schema({
 
     numeroSecuriteSocial  : {
         type : String,
-        default :""
+        required : true,
+        unique : true
     },
 
     sexe: {

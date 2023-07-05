@@ -1,6 +1,8 @@
 
 const authModel = require('../models/auth');
 
+const  partenaireModel = require('../models/partenaires');
+
 const bcrytjs = require('bcryptjs');
 
 const salt = bcrytjs.genSaltSync(10);
@@ -12,6 +14,7 @@ const hbs = require('nodemailer-express-handlebars');
 const veriffMAil = require('deep-email-validator');
 
 const message  =  require('../utils/message');
+
 const codeEmail = require('../models/code-email');
 
 const kickbox = require('kickbox').client(process.env.KEYKICKBOX).kickbox();
@@ -100,6 +103,37 @@ exports.verifMail = async(req,res,next) =>{
 
 
 
+}
+
+exports.checkNumerSocial  = async (req,res) => {
+    try {
+
+        let {numeroSecuriteSocial} = req.body;
+    
+       
+    
+        const auth = await authModel.findOne({
+            numeroSecuriteSocial : numeroSecuriteSocial
+        }).exec();
+
+        const  partenaire = await  partenaireModel.findOne({
+            numeroSecuriteSocial : numeroSecuriteSocial
+        }).exec();
+    
+        if (auth || partenaire ) {
+        return message.response(res , message.error() , 403 , 'numeroSecuriteSocial existe déjas');
+            
+        }else {
+            return message.response(res , message.createObject('Email') , 200 , "numeroSecuriteSocial valid");
+        }
+    
+    
+      
+       
+        } catch (error) {
+            return  message.response(res , message.error() ,404 , error);
+            
+        }   
 }
 
 exports.forgetPassword =  async (req,res ,next) => {

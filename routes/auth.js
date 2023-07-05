@@ -15,6 +15,7 @@ routes.post('/', authCtrl.store);
 routes.post('/auth', authCtrl.auth);
 routes.post('/forgetPassword',authCtrl.forgetPassword);
 routes.post('/verifMail',authCtrl.verifMail);
+routes.post('/verifNumeroSocial',authCtrl.checkNumerSocial);
 routes.post('/verif-code',authCtrl.verifCodeVerif);
 routes.put('/:id', authMidleweare , authCtrl.update);
 routes.delete('/:id', authMidleweare ,authCtrl.delete);
