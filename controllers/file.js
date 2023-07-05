@@ -17,7 +17,7 @@ exports.store = async (req, res ,next ) => {
     console.log(F);
 
     if ((F =='File to large')) {
-        return res.json({
+        return res.status(404).json({
             message: 'Fichier trop volumineux ',
             status: 'OK',
             data: "",
