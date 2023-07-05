@@ -21,6 +21,7 @@
     "express": "^4.17.3",
     "jsonwebtoken": "^9.0.0",
     "kickbox": "^2.0.4",
+    "luxon": "^3.3.0",
     "mime": "^3.0.0",
     "mongoose": "^6.2.10",
     "mongoose-paginate": "^5.0.3",

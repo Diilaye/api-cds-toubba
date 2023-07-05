@@ -1,4 +1,4 @@
-const DateTime = require("node-datetime/src/datetime");
+const { DateTime } = require('luxon');
 const authModel = require("../models/auth");
 const transactionModel = require("../models/transaction");
 const path = require('path');
@@ -27,7 +27,7 @@ exports.success = async (req, res ,next )=> {
     transaction.status = "SUCCESS";
     
 
-    transaction.dateTransactionSuccess = new Date().toISOString().split('T')[0];
+    transaction.dateTransactionSuccess = DateTime.now().toFormat('dd-MM-yyyy');
 
 
    const tf = await transaction.save();
