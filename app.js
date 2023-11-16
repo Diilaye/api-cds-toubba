@@ -42,8 +42,8 @@ app.use(bodyParser.urlencoded({
 }));
 paypal.configure({
     'mode': 'live', //sandbox or live
-    'client_id': 'AUyqnOC37-dAeF8V4Q9h38MilGty1sa0yaD0fTq6FfK9fobWaF3TzHEEM89wS0QuKOjsW1UVZhsciiQm',
-    'client_secret': 'EPH_fnApZeS60sXHjraVaR3W_1Cw52SMCjTl__JPW3JM0KiumRYcq10rQMO4_IqgONAuWxfZnzsrru0P'
+    'client_id':  process.env.client_id ,
+    'client_secret': process.env.client_secret
   });
 /**
  * Import Router 
