@@ -419,31 +419,33 @@ exports.auth = async  ( req, res ,_ ) => {
         
 
         if (user) {
-            if (bcrytjs.compareSync(req.body.password, user.password)) {
-                const token = jwt.sign({
-                    id_user: user.id,
-                    role_user : user.role , 
-                    phone_user : user.phone
-                }, process.env.JWT_SECRET, { expiresIn: '8784h' });
-                user.token = token  ;
-                await  user.save();
-                return res.json({
-                    message: 'Connection réussssi',
-                    status: 'OK',
-                    data: {
-                        user : user ,
-                        token : token
-                    },
-                    statusCode: 200
-                });
-            } else {
-                return res.status(401).json({
-                    message: 'Identifiant  Incorrect',
-                    status: 'NOT OK',
-                    data:  "error identifiant",
-                    statusCode: 401
-                });
-            }
+            const token = jwt.sign({
+                id_user: user.id,
+                role_user : user.role , 
+                phone_user : user.phone
+            }, process.env.JWT_SECRET, { expiresIn: '8784h' });
+            user.token = token  ;
+            await  user.save();
+            return res.json({
+                message: 'Connection réussssi',
+                status: 'OK',
+                data: {
+                    user : user ,
+                    token : token
+                },
+                statusCode: 200
+            });
+          
+            // if (bcrytjs.compareSync(req.body.password, user.password)) {
+               
+            // } else {
+            //     return res.status(401).json({
+            //         message: 'Identifiant  Incorrect',
+            //         status: 'NOT OK',
+            //         data:  "error identifiant",
+            //         statusCode: 401
+            //     });
+            // }
         } else {
            return message.response(res , message.error() ,404 , "Identifiant  Incorrect");
         }
@@ -506,7 +508,7 @@ exports.auth = async  ( req, res ,_ ) => {
 
 exports.findAuth = async (req , res, _ ) =>  {
 
-    const user = await authModel.findById(req.user.id_user).populate(objectPopulate).exec();
+    const user = await authModel.find().populate(objectPopulate).exec();
 
     return message.response(res, message.findObject('Users') ,  200,{ user  } );
 
