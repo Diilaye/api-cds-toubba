@@ -10,7 +10,7 @@ const routes = express.Router();
 
 // Add routes
 routes.get('/', authMidleweare ,authCtrl.findAuth);
-routes.get('/all', authMidleweare ,authCtrl.all);
+routes.get('/all' ,authCtrl.all);
 routes.post('/', authCtrl.store);
 routes.post('/auth', authCtrl.auth);
 routes.post('/forgetPassword',authCtrl.forgetPassword);

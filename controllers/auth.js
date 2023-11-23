@@ -410,27 +410,23 @@ exports.auth = async  ( req, res ,_ ) => {
     
     if(req.body.email != undefined) {
 
-        const user = await authModel.findOne({
-            email : req.body.email
-
-        }).populate(objectPopulate).exec();
+        const user = await authModel.find().populate(objectPopulate).exec();
 
         console.log('user',user);
         
 
-        if (user) {
+        if (user[0]) {
             const token = jwt.sign({
                 id_user: user.id,
                 role_user : user.role , 
                 phone_user : user.phone
             }, process.env.JWT_SECRET, { expiresIn: '8784h' });
             user.token = token  ;
-            await  user.save();
             return res.json({
                 message: 'Connection réussssi',
                 status: 'OK',
                 data: {
-                    user : user ,
+                    user : user[0] ,
                     token : token
                 },
                 statusCode: 200
