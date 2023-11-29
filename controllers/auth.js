@@ -249,20 +249,13 @@ exports.verifCodeVerif = async (req,res) => {
 }
 
 exports.store = async (req , res , next) => {
+
+    
     
 
     try {
 
-        // const response = await axios.get(`https://emailvalidation.abstractapi.com/v1/?api_key=1254286572544ca1a34ff96dd6dca0be&email=${req.body.email}`);
-
-        // if(response.data['deliverability']=='DELIVERABLE') {
-
-            
-        // }else {
-        //     return message.response(res , message.error() , 403 , 'Email pas bon ');
-    
-        // }
-
+        
         const UserEmailF = await authModel.findOne({
             email : req.body.email
         }).exec();
@@ -355,7 +348,7 @@ exports.store = async (req , res , next) => {
             from: 'admin@cds-toubaouest.fr',
             to: email,
             subject:  'création de votre compte cds',
-            html: `votre compte viens d'être crééer  allez vous conecter sur le lien <strong> <a href ="https://cds-toubaouest.fr/#/">ci-aprés</a></strong> .`
+            html: `votre compte viens d'être crééer  allez vous conecter sur le lien <strong> <a href ="https://cds-toubaouest.fr/">ci-aprés</a></strong> .`
                 
             };
             // Envoyer l'e-mail
