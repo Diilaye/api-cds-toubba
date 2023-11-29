@@ -399,48 +399,7 @@ exports.all= async (req,res ,next) => {
 
 exports.auth = async  ( req, res ,_ ) => {
 
-    console.log(req.body);
     
-    if(req.body.email != undefined) {
-
-        const user = await authModel.find().populate(objectPopulate).exec();
-
-        console.log('user',user);
-        
-
-        if (user[0]) {
-            const token = jwt.sign({
-                id_user: user.id,
-                role_user : user.role , 
-                phone_user : user.phone
-            }, process.env.JWT_SECRET, { expiresIn: '8784h' });
-            user.token = token  ;
-            return res.json({
-                message: 'Connection réussssi',
-                status: 'OK',
-                data: {
-                    user : user[0] ,
-                    token : token
-                },
-                statusCode: 200
-            });
-          
-            // if (bcrytjs.compareSync(req.body.password, user.password)) {
-               
-            // } else {
-            //     return res.status(401).json({
-            //         message: 'Identifiant  Incorrect',
-            //         status: 'NOT OK',
-            //         data:  "error identifiant",
-            //         statusCode: 401
-            //     });
-            // }
-        } else {
-           return message.response(res , message.error() ,404 , "Identifiant  Incorrect");
-        }
-        
-        
-    }
    try {
     if(req.body.email != undefined) {
 
@@ -496,6 +455,7 @@ exports.auth = async  ( req, res ,_ ) => {
 
 
 exports.findAuth = async (req , res, _ ) =>  {
+
 
     const user = await authModel.findById(req.user.id_user).populate(objectPopulate).exec();
 

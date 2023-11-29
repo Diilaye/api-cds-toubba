@@ -10,7 +10,7 @@ module.exports = async (req, res, next) => {
   let token = req.headers["x-access-token"] || req.headers["authorization"] || '';
   //if no token found, return response (without going to the next middelware)
   token = token.replace('Bearer ', '');
-
+  console.log(token);
 
   if (!token) return res.json({
     message: 'No Token',
@@ -28,6 +28,7 @@ module.exports = async (req, res, next) => {
       
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
+    console.log("decoded"); 
     console.log(decoded); 
 
     req.user = decoded;
