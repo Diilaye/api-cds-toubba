@@ -497,7 +497,7 @@ exports.auth = async  ( req, res ,_ ) => {
 
 exports.findAuth = async (req , res, _ ) =>  {
 
-    const user = await authModel.find().populate(objectPopulate).exec();
+    const user = await authModel.findById(req.user.id_user).populate(objectPopulate).exec();
 
     return message.response(res, message.findObject('Users') ,  200,{ user  } );
 
