@@ -396,6 +396,18 @@ exports.all= async (req,res ,next) => {
     }
 }
 
+exports.one= async (req,res ,next) => {
+    try {
+         const users = await authModel.findById(req.params.id).populate(objectPopulate).exec();
+        
+         return message.response(res, message.updateObject('Users') ,  200 ,{ users  } );
+        
+    } catch (error) {
+       return  message.response(res , message.error() ,404 , error);
+        
+    }
+}
+
 
 exports.auth = async  ( req, res ,_ ) => {
 

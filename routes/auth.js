@@ -11,6 +11,7 @@ const routes = express.Router();
 // Add routes
 routes.get('/auth', authMidleweare ,authCtrl.findAuth);
 routes.get('/all' ,authCtrl.all);
+routes.get('/one/:id' ,authCtrl.one);
 routes.post('/', authCtrl.store);
 routes.post('/auth', authCtrl.auth);
 routes.post('/forgetPassword',authCtrl.forgetPassword);
