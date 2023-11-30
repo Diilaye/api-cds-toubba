@@ -384,9 +384,7 @@ exports.store = async (req , res , next) => {
 
 exports.all= async (req,res ,next) => {
     try {
-         const users = await authModel.find({
-           role: { $e: 'super' } 
-         }).populate(objectPopulate).exec();
+         const users = await authModel.find().populate(objectPopulate).exec();
         
          return message.response(res, message.updateObject('Users') ,  200 ,{ users  } );
         
