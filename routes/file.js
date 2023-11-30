@@ -4,7 +4,8 @@ const express = require('express');
 
 // import all controllers
 const  fileCtrl =  require('../controllers/file');
-const auth = require('../models/auth');
+const {checkRoleClient, checkRole} = require('../midleweares/auth');
+
 
 
 
@@ -12,10 +13,10 @@ const auth = require('../models/auth');
 const routes = new express.Router();
 
 // Add routes
-routes.get('/', auth,fileCtrl.all);
-routes.get('/:id', auth, fileCtrl.one);
+routes.get('/', checkRole('admin'),fileCtrl.all);
+routes.get('/:id', checkRole('admin'), fileCtrl.one);
 routes.post('/',fileCtrl.store);
-routes.delete('/:id', auth, fileCtrl.delete);
+routes.delete('/:id', checkRoleClient(), fileCtrl.delete);
 
 module.exports = routes;
     

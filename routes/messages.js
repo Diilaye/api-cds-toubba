@@ -3,18 +3,19 @@ const express = require('express');
 
 // import all controllers
 const  messageCtrl =  require('../controllers/messages');
-const auth = require('../midleweares/auth');
+const {checkRoleClient, checkRole} = require('../midleweares/auth');
+
 
 
 
 const routes = new express.Router();
 
 // Add routes
-routes.get('/', auth,messageCtrl.all);
-routes.get('/:id', auth,messageCtrl.one);
-routes.put('/:id', auth,messageCtrl.update);
-routes.post('/',auth,messageCtrl.store);
-routes.delete('/:id', auth,messageCtrl.delete);
+routes.get('/', checkRoleClient(),messageCtrl.all);
+routes.get('/:id', checkRoleClient(),messageCtrl.one);
+routes.put('/:id', checkRoleClient(),messageCtrl.update);
+routes.post('/',checkRoleClient(),messageCtrl.store);
+routes.delete('/:id', checkRoleClient(),messageCtrl.delete);
 
 module.exports = routes;
     

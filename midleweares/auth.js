@@ -5,45 +5,68 @@ require('dotenv').config({
     path:'./.env'
 });
 
-module.exports = async (req, res, next) => {
+exports.checkRoleClient = () => {
+
+  return (req, res, next) => {
+
   //get the token from the header if present
   let token = req.headers["x-access-token"] || req.headers["authorization"] || '';
   //if no token found, return response (without going to the next middelware)
   token = token.replace('Bearer ', '');
-  console.log(token);
 
-  if (!token) return res.json({
-    message: 'No Token',
+
+  if (!token) return res.status(404).json({
+    message: 'No Token found',
     statusCode: 400,
     data: null,
-
     status: 'NOT OK'
   });
 
- 
-  
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
 
-
-  try {
-      
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = decoded;
     
-    console.log("decoded"); 
-    console.log(decoded); 
+      req.token = token;
 
-    req.user = decoded;
-    
-    req.token = token;
-
-    next();
-  
-    } catch (ex) {
-      console.log(ex);
-    res.json({
-      message: 'unauthorized authentication required',
-      statusCode: 401,
-      data: ex,
-      status: 'NOT OK'
+      next();
     });
-  }
-};
+  };
+}
+exports.checkRole = (role) => {
+
+  return (req, res, next) => {
+
+  //get the token from the header if present
+  let token = req.headers["x-access-token"] || req.headers["authorization"] || '';
+  //if no token found, return response (without going to the next middelware)
+  token = token.replace('Bearer ', '');
+
+
+  if (!token) return res.status(404).json({
+    message: 'No Token found',
+    statusCode: 400,
+    data: null,
+    status: 'NOT OK'
+  });
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+        return res.status(403).json({ message: 'Failed to authenticate token.' , statusCode: 403,
+        data: null,
+        status: 'NOT OK' });
+      }
+
+      if (decoded.roles_user !== role) {
+        return res.status(403).json({ message: 'You do not have permission to access this resource.'  ,  statusCode: 403,
+        data: null,
+        status: 'NOT OK'});
+      }
+
+      req.user = decoded;
+    
+      req.token = token;
+
+      next();
+    });
+  };
+}
