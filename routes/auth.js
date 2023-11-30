@@ -10,7 +10,7 @@ const routes = express.Router();
 
 // Add routes
 routes.get('/auth', checkRoleClient() ,authCtrl.findAuth);
-routes.get('/all' ,checkRole('admin'),authCtrl.all);
+routes.get('/all' ,checkRole('super'),authCtrl.all);
 routes.get('/one/:id' ,authCtrl.one);
 routes.post('/', authCtrl.store);
 routes.post('/auth', authCtrl.auth);

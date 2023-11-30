@@ -13,8 +13,8 @@ const {checkRoleClient, checkRole} = require('../midleweares/auth');
 const routes = new express.Router();
 
 // Add routes
-routes.get('/', checkRole('admin'),fileCtrl.all);
-routes.get('/:id', checkRole('admin'), fileCtrl.one);
+routes.get('/', checkRole('super'),fileCtrl.all);
+routes.get('/:id', checkRole('super'), fileCtrl.one);
 routes.post('/',fileCtrl.store);
 routes.delete('/:id', checkRoleClient(), fileCtrl.delete);
 
