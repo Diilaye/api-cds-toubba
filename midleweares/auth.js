@@ -56,7 +56,8 @@ exports.checkRole = (role) => {
         status: 'NOT OK' });
       }
 
-      if (decoded.roles_user !== role) {
+
+      if (decoded.role_user !== role) {
         return res.status(403).json({ message: 'You do not have permission to access this resource.'  ,  statusCode: 403,
         data: null,
         status: 'NOT OK'});
