@@ -178,12 +178,17 @@ exports.update = async  (req,res,next)=> {
             objectEmail,
             messageF,
             recive,
-            files
+            files,
+            status
         } = req.body;
     
         const messageD  = await messageModel.findById(req.params.id);
     
     
+        if (status != undefined) {
+            messageD.status = status;  
+        }
+
         if (objectEmail != undefined) {
             messageD.objectEmail = objectEmail;  
         }
