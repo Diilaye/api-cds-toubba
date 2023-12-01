@@ -107,6 +107,55 @@ exports.all = async  (req, res ,next) => {
 
 }
 
+exports.replayMessage  = async (req,res,next) => {
+
+
+    try {
+    let {
+        objectEmail,
+        messageF,
+    } = req.body;
+
+    const messageS  = messageModel();
+
+    messageS.objectEmail = objectEmail;
+
+    messageS.message = messageF;
+
+    messageS.send = req.user.id_user;
+
+    messageS.status = "replay";
+
+    const messageSave = await messageS.save();
+
+    const mesF = await messageModel.findById(messageSave.id).populate(objectPopulate).exec();
+
+    return message.response(res,message.createObject('e-mail'),201,mesF);
+
+    } catch (error) {
+
+       return message.response(res , message.error() ,404 , error);
+    
+    }
+
+}
+
+exports.allPartenaire = async  (req, res ,next) => {
+
+    try {
+        
+        const messageF = await messageModel.find({
+            recive : req.user.id_user
+        }).populate(objectPopulate).exec();
+
+       return message.response(res,message.findObject('e-mail'),200,messageF);
+
+    } catch (error) {
+        return message.response(res, message.error(),404,error); 
+    }
+
+}
+
 exports.one  = async (req,res,next)=>{
     try {
         let {id} =req.params;

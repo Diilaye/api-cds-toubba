@@ -12,9 +12,11 @@ const routes = new express.Router();
 
 // Add routes
 routes.get('/', checkRoleClient(),messageCtrl.all);
+routes.get('/allUser', checkRoleClient(),messageCtrl.allPartenaire);
 routes.get('/:id', checkRoleClient(),messageCtrl.one);
 routes.put('/:id', checkRoleClient(),messageCtrl.update);
 routes.post('/',checkRoleClient(),messageCtrl.store);
+routes.post('/replay',checkRoleClient(),messageCtrl.replayMessage);
 routes.delete('/:id', checkRoleClient(),messageCtrl.delete);
 
 module.exports = routes;
