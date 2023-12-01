@@ -95,6 +95,7 @@ exports.store  = async (req,res,next) => {
 
 exports.all = async  (req, res ,next) => {
 
+ 
     try {
         
         const messageF = await messageModel.find({

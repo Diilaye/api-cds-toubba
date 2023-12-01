@@ -11,7 +11,7 @@ const {checkRoleClient, checkRole} = require('../midleweares/auth');
 const routes = new express.Router();
 
 // Add routes
-routes.get('/', checkRoleClient(),messageCtrl.all);
+routes.get('/', checkRole("super"),messageCtrl.all);
 routes.get('/allUser', checkRoleClient(),messageCtrl.allPartenaire);
 routes.get('/:id', checkRoleClient(),messageCtrl.one);
 routes.put('/:id', checkRoleClient(),messageCtrl.update);
