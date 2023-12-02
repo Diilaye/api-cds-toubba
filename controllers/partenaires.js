@@ -41,6 +41,7 @@ exports.store = async (req, res ,next ) => {
     partenaires.numero_rue = numero_rue ;
     partenaires.numeroSecuriteSocial = numeroSecuriteSocial ;
     partenaires.sexe = sexe ;
+    partenaires.parent = req.user.id_user;
     partenaires.justificatif = justificatif ;
 
     const savePartenaires = await  partenaires.save();
@@ -88,6 +89,48 @@ exports.store = async (req, res ,next ) => {
 }
 
 
+
+exports.all = async (req  , res ,next ) => {
+    
+    try {
+        const files = await PartenaireModel.find(req.query).exec(); 
+        res.json({
+            message: 'Fichiers trouvée avec succes',
+            status: 'OK',
+            data: files,
+            statusCode: 200
+        })
+    } catch (error) {
+        res.json({
+            message: 'Fichier non trouvée',
+            status: 'OK',
+            data: err,
+            statusCode: 400
+        })
+    }
+}
+
+exports.allByUser = async (req  , res ,next ) => {
+    
+    try {
+        const files = await PartenaireModel.find({
+            parent : req.user.id_user
+        }).exec(); 
+        res.json({
+            message: 'Fichiers trouvée avec succes',
+            status: 'OK',
+            data: files,
+            statusCode: 200
+        })
+    } catch (error) {
+        res.json({
+            message: 'Fichier non trouvée',
+            status: 'OK',
+            data: err,
+            statusCode: 400
+        })
+    }
+}
 
 exports.all = async (req  , res ,next ) => {
     

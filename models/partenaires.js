@@ -74,6 +74,12 @@ const Partenaires = new Schema({
         unique : true
     },
 
+    parent : {
+        type: Schema.Types.ObjectId,
+        ref: "users",
+        default : null
+    },
+
     sexe: {
         type : String,
         enum: ['homme', 'femme'],

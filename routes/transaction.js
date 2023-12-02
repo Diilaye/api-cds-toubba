@@ -10,7 +10,7 @@ const {checkRoleClient, checkRole} = require('../midleweares/auth');
 const routes = new express.Router();
 
 // Add routes
-routes.get('/', checkRoleClient(),transactionCtrl.all);
+routes.get('/', checkRole('super'),transactionCtrl.all);
 routes.get('/allByUser', checkRoleClient(),transactionCtrl.allByUser);
 routes.get('/success',transactionCtrl.success);
 routes.get('/failled',transactionCtrl.failled);
