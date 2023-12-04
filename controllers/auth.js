@@ -281,6 +281,7 @@ exports.store = async (req , res , next) => {
             profile,
             nom,
             prenom,
+            villeResidence,
             telephone,
             pays,
             rue,
@@ -308,6 +309,7 @@ exports.store = async (req , res , next) => {
         auth.profile = profile;
         auth.nom = nom;
         auth.prenom = prenom;
+        auth.villeResidence = villeResidence;
         auth.telephone = telephone;
         auth.pays = pays;
         auth.rue = rue;

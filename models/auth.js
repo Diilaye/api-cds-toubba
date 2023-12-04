@@ -76,6 +76,11 @@ const UserModel = new Schema({
         default: 'france'
     },
 
+    villeResidence : {
+        type : String,
+        default :""
+    }, 
+
     vile : {
         type : String,
         default :""
