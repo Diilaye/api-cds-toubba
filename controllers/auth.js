@@ -350,13 +350,13 @@ exports.store = async (req , res , next) => {
             to: "diikaanedev@gmail.com",
             subject:  'création de votre compte cds',
             html: `votre compte viens d'être crééer  allez vous conecter sur le lien <strong> <a href ="https://cds-toubaouest.fr/">ci-aprés</a></strong> .`,
-            attachments: [
-                {
-                  filename: 'inspection.png',
-                  content: fs.readFileSync(path.join(__dirname, 'uploads', 'a75da77295c.jpeg')), // Remplacez par le contenu de votre pièce jointe
-                },
-                // Ajout
-            ]
+            // attachments: [
+            //     {
+            //       filename: 'inspection.png',
+            //       content: fs.readFileSync(path.join(__dirname, 'uploads', 'a75da77295c.jpeg')), // Remplacez par le contenu de votre pièce jointe
+            //     },
+            //     // Ajout
+            // ]
             };
             // Envoyer l'e-mail
             transporter.sendMail(mailOptions, (error, info) => {
