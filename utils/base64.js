@@ -42,8 +42,8 @@ exports.base64 =  async (base) => {
       
        if (fileSizeInBytes > 5) {
         
-         fs.unlinkSync(path.join(__dirname,'..','uploads',fileName+'.'+type.split('/')[1]));
-        return 'File to large';
+            fs.unlinkSync(path.join(__dirname,'..','uploads',fileName+'.'+type.split('/')[1]));
+            return 'File to large';
        
         }else {
             return {
@@ -51,9 +51,6 @@ exports.base64 =  async (base) => {
                 'type' :type
             };
         }
-      
-
-        
 
     }
 
