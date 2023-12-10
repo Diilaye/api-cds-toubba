@@ -296,6 +296,8 @@ exports.store = async (req , res , next) => {
         contactReferent,
         dateNaiss
     } = req.body;
+
+    console.log(req.body);
     
     const auth = authModel() ;
 
