@@ -424,9 +424,13 @@ exports.store = async (req , res , next) => {
 
 exports.all= async (req,res ,next) => {
     try {
+
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
          const users = await authModel.find({
             role : 'utilisateur'
-         }).populate(objectPopulate).exec();
+         }).populate(objectPopulate).skip((page - 1) * limit)
+         .limit(limit).exec();
         
          return message.response(res, message.updateObject('Users') ,  200 ,{ users  } );
         
