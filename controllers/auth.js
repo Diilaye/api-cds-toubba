@@ -323,7 +323,9 @@ exports.store = async (req , res , next) => {
         auth.email = email;
         auth.password = passwordCrypt;
         auth.role = "utilisateur";
-        auth.profile = profile;
+        if(profile !=""){
+            auth.profile = profile;
+        }
         auth.nom = nom;
         auth.prenom = prenom;
         auth.villeResidence = villeResidence;
