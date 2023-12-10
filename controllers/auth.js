@@ -67,16 +67,8 @@ exports.verifMail = async(req,res,next) =>{
 
     let {email} = req.body;
 
-    // kickbox.verify(email, function (err, response) {
-    //     // Let's see some results
-    //     console.log(response.body);
-    //     return message.response(res , message.error() , 200 , response.body);
+  
 
-    //   });
-
-    emailExistence.check(email, function(error, response){
-        console.log('res: '+response);
-    });
 
     const auth = await authModel.findOne({
         email : email
@@ -89,19 +81,37 @@ exports.verifMail = async(req,res,next) =>{
         return message.response(res , message.createObject('Email') , 200 , "Email valid");
     }
 
+   
+    } catch (error) {
+        return  message.response(res , message.error() ,404 , error);
+        
+    }   
 
-    // const response = await axios.get(`https://emailvalidation.abstractapi.com/v1/?api_key=1254286572544ca1a34ff96dd6dca0be&email=${email}`);
 
-    // console.log(response.data);
+
+}
+
+exports.verifTel = async(req,res,next) =>{
+
+
     
+    try {
 
-    //     if(response.data['deliverability']=='DELIVERABLE') {
+    let {telephone} = req.body;
 
-          
+  
 
-    //     }else {
-    //         return  message.response(res , message.error() ,404 , "email n'existe pas");
-    //     }
+
+    const auth = await authModel.findOne({
+        telephone : telephone
+    }).exec();
+
+    if (auth) {
+    return message.response(res , message.error() , 403 , 'telephone existe déjas');
+        
+    }else {
+        return message.response(res , message.createObject('telephone') , 200 , "telephone valid");
+    }
 
    
     } catch (error) {
@@ -114,6 +124,7 @@ exports.verifMail = async(req,res,next) =>{
 }
 
 exports.checkNumerSocial  = async (req,res) => {
+   
     try {
 
         let {numeroSecuriteSocial} = req.body;
@@ -570,7 +581,7 @@ exports.update = async (req, res ,next ) => {
                 from: 'admin@cds-toubaouest.fr',
                 to: auth.email,
                 subject:  'Validification compte cds-touba',
-                html: `votre compte viens d'être <strong>${req.body.active}</strong>  allez vous conecter sur le lien <strong> <a href ="https://cds-toubaouest.fr/#/">ci-aprés</a></strong> .`
+                html: `votre compte viens d'être <strong>${req.body.active}</strong>  allez vous conecter sur le lien <strong> <a href ="https://cds-toubaouest.fr/">ci-aprés</a></strong> .`
                 };
                 
                 // Envoyer l'e-mail

@@ -40,7 +40,7 @@ exports.base64 =  async (base) => {
         const stats = fs.statSync(path.join(__dirname,'..','uploads',fileName+'.'+type.split('/')[1]));
         const fileSizeInBytes = stats.size / (1024 * 1024);
       
-       if (fileSizeInBytes > 5) {
+       if (fileSizeInBytes > 10) {
         
             fs.unlinkSync(path.join(__dirname,'..','uploads',fileName+'.'+type.split('/')[1]));
             return 'File to large';

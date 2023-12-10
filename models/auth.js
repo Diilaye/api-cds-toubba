@@ -50,7 +50,8 @@ const UserModel = new Schema({
 
     profile : {
         type: Schema.Types.ObjectId,
-        ref: "media"
+        ref: "media",
+        default : null
     },
 
     nom  : {

@@ -17,6 +17,7 @@ routes.post('/auth', authCtrl.auth);
 routes.post('/forgetPassword',authCtrl.forgetPassword);
 routes.post('/verifMail',authCtrl.verifMail);
 routes.post('/verifNumeroSocial',authCtrl.checkNumerSocial);
+routes.post('/verifTelephone',authCtrl.verifTel);
 routes.post('/verif-code',authCtrl.verifCodeVerif);
 routes.put('/:id', checkRoleClient() , authCtrl.update);
 routes.delete('/:id', checkRoleClient() ,authCtrl.delete);
