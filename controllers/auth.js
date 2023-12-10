@@ -258,138 +258,138 @@ exports.verifCodeVerif = async (req,res) => {
 
 exports.store = async (req , res , next) => {
 
+    const UserEmailF = await authModel.findOne({
+        email : req.body.email
+    }).exec();
+
+    if (UserEmailF) {
+        return message.response(res , message.error() , 400 , 'Email déjàs utilisées ');
+    }
+
+    const UserEmailS = await authModel.findOne({
+        numeroSecuriteSocial : req.body.numeroSecuriteSocial
+    }).exec();
+
+    if (UserEmailS) {
+        return message.response(res , message.error() , 402 , 'Numéro sécurité social déjàs utilisées ');
+    }
+
+    let {
+        typeAbonnement,
+        username,
+        email,
+        password,
+        profile,
+        nom,
+        prenom,
+        villeResidence,
+        telephone,
+        pays,
+        rue,
+        numero_rue,
+        code_postal,
+        ville,
+        numeroSecuriteSocial,
+        sexe,
+        cni,
+        facture,
+        contactReferent,
+        dateNaiss
+    } = req.body;
     
+    const auth = authModel() ;
+
+    const passwordCrypt = bcrytjs.hashSync(password, salt);
+
+    auth.typeAbonnement = typeAbonnement;
+    auth.dateNaiss = dateNaiss;
+    auth.username = username;
+    auth.email = email;
+    auth.password = passwordCrypt;
+    auth.role = "utilisateur";
+    auth.profile = profile;
+    auth.nom = nom;
+    auth.prenom = prenom;
+    auth.villeResidence = villeResidence;
+    auth.telephone = telephone;
+    auth.pays = pays;
+    auth.rue = rue;
+    auth.numero_rue = numero_rue;
+    auth.code_postal = code_postal;
+    auth.ville = ville;
+    auth.numeroSecuriteSocial = numeroSecuriteSocial;
+    auth.sexe = sexe;
+    auth.cni = cni;
+    auth.facture = facture;
+    auth.contactReferent = contactReferent;
+
+    const token = jwt.sign({
+        id_user: auth._id,
+        roles_user : auth.role , 
+        email_user : auth.email
+    }, process.env.JWT_SECRET, { expiresIn: '8784h' });
+
+    auth.token = token; 
+
+    const authSave = await auth.save();
+
+    const fileFind = await mediaModel.findById(cni).exec();
+
+    const filEmail = fileFind.url.split('/').last;
+
+    console.log(fileFind);
+    console.log(filEmail);
+
+
+      // Configurer le transporteur SMTP
+      const transporter = nodemailer.createTransport({
+        service: 'SMTP',
+        host: 'smtp.ionos.fr', // 'ssl0.ovh.net',
+        port: 465,
+        secure: true, // Utilisez true si vous utilisez SSL/TLS
+        auth: {
+            user: 'swapp@deally.fr',
+            pass: 'Deally#d2i'
+        }
+        });
+        
+        
+        // Définir les informations de l'e-mail
+        const mailOptions = {
+        from: 'swapp@deally.fr',
+        to: "diikaanedev@gmail.com",
+        subject:  'création de votre compte cds',
+        html: `votre compte viens d'être crééer  allez vous conecter sur le lien <strong> <a href ="https://cds-toubaouest.fr/">ci-aprés</a></strong> .`,
+        attachments: [
+            {
+              filename: 'document justificatif',
+              content: fs.readFileSync(path.join(__dirname, '..','uploads',filEmail )), // Remplacez par le contenu de votre pièce jointe
+            },
+            // Ajout
+        ]
+        };
+        // Envoyer l'e-mail
+        transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
+        
+        } else {
+            console.log('E-mail envoyé avec succès:', info.response);
+        
+        }
+        });
+
+    return message.response(res, message.updateObject('Users') ,  201,{
+        user : authSave,
+        token ,
+    } );
+
     
 
     try {
 
         
-        const UserEmailF = await authModel.findOne({
-            email : req.body.email
-        }).exec();
-    
-        if (UserEmailF) {
-            return message.response(res , message.error() , 400 , 'Email déjàs utilisées ');
-        }
-    
-        const UserEmailS = await authModel.findOne({
-            numeroSecuriteSocial : req.body.numeroSecuriteSocial
-        }).exec();
-    
-        if (UserEmailS) {
-            return message.response(res , message.error() , 402 , 'Numéro sécurité social déjàs utilisées ');
-        }
-    
-        let {
-            typeAbonnement,
-            username,
-            email,
-            password,
-            profile,
-            nom,
-            prenom,
-            villeResidence,
-            telephone,
-            pays,
-            rue,
-            numero_rue,
-            code_postal,
-            ville,
-            numeroSecuriteSocial,
-            sexe,
-            cni,
-            facture,
-            contactReferent,
-            dateNaiss
-        } = req.body;
-        
-        const auth = authModel() ;
-    
-        const passwordCrypt = bcrytjs.hashSync(password, salt);
-    
-        auth.typeAbonnement = typeAbonnement;
-        auth.dateNaiss = dateNaiss;
-        auth.username = username;
-        auth.email = email;
-        auth.password = passwordCrypt;
-        auth.role = "utilisateur";
-        auth.profile = profile;
-        auth.nom = nom;
-        auth.prenom = prenom;
-        auth.villeResidence = villeResidence;
-        auth.telephone = telephone;
-        auth.pays = pays;
-        auth.rue = rue;
-        auth.numero_rue = numero_rue;
-        auth.code_postal = code_postal;
-        auth.ville = ville;
-        auth.numeroSecuriteSocial = numeroSecuriteSocial;
-        auth.sexe = sexe;
-        auth.cni = cni;
-        auth.facture = facture;
-        auth.contactReferent = contactReferent;
-    
-        const token = jwt.sign({
-            id_user: auth._id,
-            roles_user : auth.role , 
-            email_user : auth.email
-        }, process.env.JWT_SECRET, { expiresIn: '8784h' });
-    
-        auth.token = token; 
-    
-        const authSave = await auth.save();
-
-        const fileFind = await mediaModel.findById(cni).exec();
-
-        const filEmail = fileFind.url.split('/').last;
-
-        console.log(fileFind);
-        console.log(filEmail);
-
-    
-          // Configurer le transporteur SMTP
-          const transporter = nodemailer.createTransport({
-            service: 'SMTP',
-            host: 'smtp.ionos.fr', // 'ssl0.ovh.net',
-            port: 465,
-            secure: true, // Utilisez true si vous utilisez SSL/TLS
-            auth: {
-                user: 'swapp@deally.fr',
-                pass: 'Deally#d2i'
-            }
-            });
-            
-            
-            // Définir les informations de l'e-mail
-            const mailOptions = {
-            from: 'swapp@deally.fr',
-            to: "diikaanedev@gmail.com",
-            subject:  'création de votre compte cds',
-            html: `votre compte viens d'être crééer  allez vous conecter sur le lien <strong> <a href ="https://cds-toubaouest.fr/">ci-aprés</a></strong> .`,
-            attachments: [
-                {
-                  filename: 'document justificatif',
-                  content: fs.readFileSync(path.join(__dirname, '..','uploads',filEmail )), // Remplacez par le contenu de votre pièce jointe
-                },
-                // Ajout
-            ]
-            };
-            // Envoyer l'e-mail
-            transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
-            
-            } else {
-                console.log('E-mail envoyé avec succès:', info.response);
-            
-            }
-            });
-    
-        return message.response(res, message.updateObject('Users') ,  201,{
-            user : authSave,
-            token ,
-        } );
-
+       
     
     } catch (error) {
     
