@@ -24,6 +24,8 @@ const axios = require('axios');
 
 const emailExistence = require('email-existence');
 
+const fs = require('fs');
+
 
 require('dotenv').config({
     path: './.env'
