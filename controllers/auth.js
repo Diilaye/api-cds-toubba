@@ -336,10 +336,12 @@ exports.store = async (req , res , next) => {
 
     const fileFind = await mediaModel.findById(cni).exec();
 
-    const filEmail = fileFind.url;
+    const filEmail = fileFind.url.split('/');
+
+    const lastElement = filEmail.pop();
 
     console.log(fileFind);
-    console.log(filEmail);
+    console.log(lastElement);
 
 
       // Configurer le transporteur SMTP
@@ -364,7 +366,7 @@ exports.store = async (req , res , next) => {
         attachments: [
             {
               filename: 'document justificatif',
-              content: fs.readFileSync(path.join(__dirname, '..','uploads',filEmail )), // Remplacez par le contenu de votre pièce jointe
+              content: fs.readFileSync(path.join(__dirname, '..','uploads',lastElement )), // Remplacez par le contenu de votre pièce jointe
             },
             // Ajout
         ]
