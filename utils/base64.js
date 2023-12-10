@@ -20,7 +20,7 @@ exports.base64 =  async (base) => {
 
         response.type = matches[1];
 
-        response.data = Buffer(matches[2], 'base64');
+        response.data = Buffer.from(matches[2], 'base64');
 
         let decodedImg = response;
         
