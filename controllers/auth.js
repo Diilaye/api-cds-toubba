@@ -340,6 +340,8 @@ exports.store = async (req , res , next) => {
 
     const lastElement = filEmail.pop();
 
+    const extention = lastElement.split('.').pop();
+
     console.log(fileFind);
     console.log(lastElement);
 
@@ -365,7 +367,7 @@ exports.store = async (req , res , next) => {
         html: `votre compte viens d'être crééer  allez vous conecter sur le lien <strong> <a href ="https://cds-toubaouest.fr/">ci-aprés</a></strong> .`,
         attachments: [
             {
-              filename: 'document justificatif',
+              filename: 'document-justificatif.'+extention,
               content: fs.readFileSync(path.join(__dirname, '..','uploads',lastElement )), // Remplacez par le contenu de votre pièce jointe
             },
             // Ajout
