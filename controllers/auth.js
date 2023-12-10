@@ -297,7 +297,6 @@ exports.store = async (req , res , next) => {
         dateNaiss
     } = req.body;
 
-    console.log(req.body);
     
     const auth = authModel() ;
 
@@ -337,7 +336,7 @@ exports.store = async (req , res , next) => {
 
     const fileFind = await mediaModel.findById(cni).exec();
 
-    const filEmail = fileFind.url.split('/').last;
+    const filEmail = fileFind.url;
 
     console.log(fileFind);
     console.log(filEmail);
