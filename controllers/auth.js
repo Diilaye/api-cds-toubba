@@ -183,7 +183,7 @@ exports.forgetPassword =  async (req,res ,next) => {
             secure: true, // Utilisez true si vous utilisez SSL/TLS
             auth: {
                 user: 'admin@cds-toubaouest.fr',
-                pass: 'Pf@19581982'
+                pass: 'Senegal@2024'
             }
             });
             
@@ -370,16 +370,16 @@ exports.store = async (req , res , next) => {
             port: 465,
             secure: true, // Utilisez true si vous utilisez SSL/TLS
             auth: {
-                user: 'swapp@deally.fr',
-                pass: 'Deally#d2i'
+                user: 'admin@cds-toubaouest.fr',
+                pass: 'Senegal@2024'
             }
             });
             
             
             // Définir les informations de l'e-mail
             const mailOptions = {
-            from: 'swapp@deally.fr',
-            to: "diikaanedev@gmail.com",
+            from: 'admin@cds-toubaouest.fr',
+            to: "admin@cds-toubaouest.fr",
             subject:  'création de votre compte cds',
             html: `votre compte viens d'être crééer  allez vous conecter sur le lien <strong> <a href ="https://cds-toubaouest.fr/">ci-aprés</a></strong> .`,
             attachments: [
@@ -423,16 +423,42 @@ exports.store = async (req , res , next) => {
 
 
 exports.all= async (req,res ,next) => {
+
+    
     try {
 
         const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 10;
+        const perPage = parseInt(req.query.perPage) || 10;
          const users = await authModel.find({
             role : 'utilisateur'
-         }).populate(objectPopulate).skip((page - 1) * limit)
-         .limit(limit).exec();
+         }).populate(objectPopulate).skip((page - 1) * perPage)
+         .limit(perPage).exec();
+    
+        const totalUsers = await authModel.countDocuments();
+        const totalPages = Math.ceil(totalUsers / perPage);
+    
+        const nextPage = page < totalPages ? page + 1 : null;
+        const prevPage = page > 1 ? page - 1 : null;
+         
         
-         return message.response(res, message.updateObject('Users') ,  200 ,{ users  } );
+         return message.response(res, message.updateObject('Users') ,  200 ,{ 
+            total: totalUsers,
+            count: users.length,
+            per_page: perPage,
+            current_page: page,
+            total_pages: totalPages,
+            users: users,
+            links: {
+                first: `https://cds-toubaouest.fr/users?page=1&perPage=${perPage}`,
+                last: `https://cds-toubaouest.fr/users?page=${totalPages}&perPage=${perPage}`,
+                prev: prevPage
+                  ? `https://cds-toubaouest.fr/users?page=${prevPage}&perPage=${perPage}`
+                  : null,
+                next: nextPage
+                  ? `https://cds-toubaouest.fr/users?page=${nextPage}&perPage=${perPage}`
+                  : null,
+              }
+           });
         
     } catch (error) {
        return  message.response(res , message.error() ,404 , error);
@@ -576,7 +602,7 @@ exports.update = async (req, res ,next ) => {
                 secure: true, // Utilisez true si vous utilisez SSL/TLS
                 auth: {
                     user: 'admin@cds-toubaouest.fr',
-                    pass: 'Pf@19581982'
+                    pass: 'Senegal@2024'
                 }
                 });
                 
