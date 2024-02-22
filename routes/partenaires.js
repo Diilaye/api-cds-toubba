@@ -16,6 +16,7 @@ const routes = new express.Router();
 routes.get('/', checkRole("super"),fileCtrl.all);
 routes.get('/allByUser', checkRoleClient(),fileCtrl.allByUser);
 routes.get('/:id', checkRoleClient(), fileCtrl.one);
+routes.put('/:id', checkRoleClient(), fileCtrl.update);
 routes.post('/',checkRoleClient(),fileCtrl.store);
 routes.delete('/:id', checkRoleClient(), fileCtrl.delete);
 

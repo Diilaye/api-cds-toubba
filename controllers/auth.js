@@ -720,7 +720,6 @@ exports.update = async (req, res ,next ) => {
         }
     
         
-        
     
     
         const userUpdate =await  auth.save();
@@ -751,4 +750,58 @@ exports.delete = (req, res , next ) => {
         return  message.response(res , message.deleteObject('Users') ,200 , "delete success");
      }).catch( err =>  message.response(res , message.error() ,404 , err));
     
+}
+
+
+exports.restaurePassword = async (req,res)=> {
+
+
+    const UserEmailF = await authModel.findOne({
+        email : req.body.email
+    }).exec();
+
+
+    if(UserEmailF) {
+
+         // Configurer le transporteur SMTP
+         const transporter = nodemailer.createTransport({
+            service: 'SMTP',
+            host: 'smtp.ionos.fr', // 'ssl0.ovh.net',
+            port: 465,
+            secure: true, // Utilisez true si vous utilisez SSL/TLS
+            auth: {
+                user: 'admin@cds-toubaouest.fr',
+                pass: 'Senegal@2024'
+            }
+            });
+            
+            
+            // Définir les informations de l'e-mail
+            const mailOptions = {
+            from: 'admin@cds-toubaouest.fr',
+            to: req.body.email,
+            subject:  'recuperation  de votre mot de passe cds',
+            html: `Cliquez sur le lien pour generer un nouveau mot de passe compte viens d'être crééer  allez vous conecter sur le lien <strong> <a href ="https://cds-toubaouest.fr/">ci-aprés</a></strong> .`,
+            };
+            // Envoyer l'e-mail
+            transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
+            
+            } else {
+                console.log('E-mail envoyé avec succès:', info.response);
+            
+            }
+            });
+    
+        return message.response(res, message.updateObject('Users') ,  201,{
+            user : authSave,
+            token ,
+        } );
+
+    }else {
+        return message.response(res , message.error() , 400 , 'Email non disponible sur le systeme ');
+
+    }
+
 }
