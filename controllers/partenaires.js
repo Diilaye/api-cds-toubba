@@ -182,6 +182,7 @@ exports.one = async (req  , res ,next ) => {
 
 exports.update = async  (req  , res ,next ) => {
 
+    
     try {
 
         let {
@@ -199,79 +200,85 @@ exports.update = async  (req  , res ,next ) => {
             sexe,
             justificatif
         } = req.body;
-
-
-    const partenaires =  PartenaireModel.findById(req.params.id); 
-
+    
+    
+    const partenaires = await  PartenaireModel.findById(req.params.id); 
+    
+    console.log(partenaires);
+    console.log("req.body");
+    console.log(req.body);
+    
     
     if(type != undefined) {
         partenaires.type = type ;
     }
-
-    if(profile != undefined) {
+    
+    if(profile != undefined  && profile !="") {
         partenaires.profile = profile ;
     }
-
-
+    
+    
     if(nom != undefined) {
         partenaires.nom = nom ;
     }
-
+    
     if(prenom != undefined) {
         partenaires.prenom = prenom ;
-
+    
     }
-
+    
     if(nom != undefined) {
         partenaires.nom = nom ;
     }
-
+    
     if(telephone != undefined) {
         partenaires.telephone = telephone ;
     }
-
+    
     if(pays != undefined) {
         partenaires.pays = pays ;
     }
-
+    
     if(ville != undefined) {
         partenaires.ville = ville ;
     }
-
+    
     if(rue != undefined) {
         partenaires.rue = rue ;
     }
-
+    
     if(numero_rue != undefined) {
         partenaires.numero_rue = numero_rue ;
     }
-
+    
     if(numeroSecuriteSocial != undefined) {
         partenaires.numeroSecuriteSocial = numeroSecuriteSocial ;
     }
-
+    
     if(sexe != undefined) {
         partenaires.sexe = sexe ;
     }
-
+    
     if(rue != undefined) {
         partenaires.rue = rue ;
     }
-
-    if(rue != undefined) {
+    
+    if(justificatif != undefined && justificatif !="") {
         partenaires.justificatif = justificatif ;
     }
-
     
-
+    
+    
     const savePartenaires = await  partenaires.save();
-
+    
     return res.json({
         message: 'Partenaires update avec succes',
         status: 'OK',
         data: savePartenaires,
         statusCode: 200
     })
+    
+       
     } catch (error) {
         res.json({
             message: 'Erreur creation',
