@@ -71,16 +71,16 @@ exports.update = async  (req,res,next)=> {
     
         console.log(contact);
     
-        if (phone != undefined) {
+        if (phone != undefined && phone !="") {
             contact.phone = phone;  
         }
     
         
-        if (nom != undefined) {
+        if (nom != undefined && nom !="") {
             contact.nom = nom;  
         }
     
-        if (prenom != undefined) {
+        if (prenom != undefined && prenom != "") {
             contact.prenom = prenom;  
         }
         

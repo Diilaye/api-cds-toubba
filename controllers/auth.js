@@ -556,10 +556,10 @@ exports.update = async (req, res ,next ) => {
     
         console.log(auth);
             
-        if (req.body.typeAbonnement!=undefined) {
+        if (req.body.typeAbonnement!=undefined &&  req.body.typeAbonnement!="") {
             auth.typeAbonnement = req.body.typeAbonnement ;
         }
-        if (req.body.password !=undefined) {
+        if (req.body.password !=undefined &&  req.body.password!="") {
             if(auth.password == undefined) {
                 const passwordCrypt = bcrytjs.hashSync(req.body.password, salt);
                 auth.passwords = auth.passwords.push(passwordCrypt);
@@ -578,19 +578,19 @@ exports.update = async (req, res ,next ) => {
         }
     
     
-        if (req.body.username !=undefined) {
+        if (req.body.username !=undefined &&  req.body.username!="") {
             
             auth.username = req.body.username ;
     
         }
     
-        if (req.body.email !=undefined) {
+        if (req.body.email !=undefined &&  req.body.email!="") {
             
             auth.email = req.body.email ;
     
         }
     
-        if (req.body.active !=undefined) {
+        if (req.body.active !=undefined &&  req.body.active!="") {
             
             auth.active = req.body.active ;
 
@@ -629,7 +629,7 @@ exports.update = async (req, res ,next ) => {
     
         }
     
-        if (req.body.profile !=undefined) {
+        if (req.body.profile !=undefined && req.body.profile!="" ) {
             
             auth.profile = req.body.profile ;
     
@@ -637,13 +637,13 @@ exports.update = async (req, res ,next ) => {
     
        
     
-        if (req.body.nom !=undefined) {
+        if (req.body.nom !=undefined &&  req.body.nom!="") {
             
             auth.nom = req.body.nom;
     
         }
     
-        if (req.body.prenom !=undefined) {
+        if (req.body.prenom !=undefined &&  req.body.prenom!="") {
             
             auth.prenom = req.body.prenom;
     
@@ -651,69 +651,69 @@ exports.update = async (req, res ,next ) => {
     
         
     
-        if (req.body.telephone !=undefined) {
+        if (req.body.telephone !=undefined &&  req.body.telephone!="") {
             
             auth.telephone = req.body.telephone;
     
         }
     
-        if (req.body.pays !=undefined) {
+        if (req.body.pays !=undefined &&  req.body.pays!="") {
             
             auth.pays = req.body.pays;
     
         }
     
-        if (req.body.ville !=undefined) {
+        if (req.body.ville !=undefined &&  req.body.ville!="") {
     
             auth.ville = req.body.ville;
     
         }
     
-        if (req.body.rue !=undefined) {
+        if (req.body.rue !=undefined &&  req.body.rue!="") {
     
             auth.rue = req.body.rue;
     
         }
 
-        if (req.body.numero_rue !=undefined) {
+        if (req.body.numero_rue !=undefined &&  req.body.numero_rue!="") {
     
             auth.numero_rue = req.body.numero_rue;
     
         }
 
-        if (req.body.code_postal !=undefined) {
+        if (req.body.code_postal !=undefined &&  req.body.code_postal!="") {
     
             auth.code_postal = req.body.code_postal;
     
         }
     
 
-        if (req.body.numeroSecuriteSocial !=undefined) {
+        if (req.body.numeroSecuriteSocial !=undefined &&  req.body.numeroSecuriteSocial!="") {
     
             auth.numeroSecuriteSocial = req.body.numeroSecuriteSocial;
     
         }
     
     
-        if (req.body.sexe !=undefined) {
+        if (req.body.sexe !=undefined &&  req.body.sexe!="") {
     
             auth.sexe = req.body.sexe;
     
         }
     
-        if (req.body.cni !=undefined) {
+        if (req.body.cni !=undefined &&  req.body.cni!="") {
     
             auth.cni = req.body.cni;
     
         }
     
-        if (req.body.facture !=undefined) {
+        if (req.body.facture !=undefined &&  req.body.facture!="") {
     
             auth.facture = req.body.facture;
     
         }
     
-        if (req.body.appreciation !=undefined) {
+        if (req.body.appreciation !=undefined &&  req.body.appreciation!="") {
     
             auth.appreciation = req.body.appreciation;
     
