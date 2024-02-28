@@ -99,7 +99,6 @@ exports.all = async  (req, res ,next) => {
     try {
         
         const messageF = await messageModel.find({
-            status : "replay"
         }).populate(objectPopulate).exec();
 
        return message.response(res,message.findObject('e-mail'),200,messageF);
