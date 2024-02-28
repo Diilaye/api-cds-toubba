@@ -44,7 +44,7 @@ const Partenaires = new Schema({
 
     pays : {
         type : String,
-        enum: ["france", "italie", "angleterre  ", "portugal" ],
+        // enum: ["france", "italie", "angleterre  ", "portugal" ],
         default: 'france'
     },
 

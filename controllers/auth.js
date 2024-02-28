@@ -635,6 +635,12 @@ exports.update = async (req, res ,next ) => {
     
         }
     
+        if (req.body.vile !=undefined && req.body.vile!="" ) {
+            
+            auth.vile = req.body.vile ;
+    
+        }
+    
        
     
         if (req.body.nom !=undefined &&  req.body.nom!="") {
