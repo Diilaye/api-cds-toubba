@@ -32,7 +32,8 @@ exports.store = async (req, res ,next ) => {
             numero_rue,
             numeroSecuriteSocial,
             sexe,
-            justificatif
+            justificatif,
+            userId
         } = req.body;
 
 
@@ -55,7 +56,13 @@ exports.store = async (req, res ,next ) => {
 
     const savePartenaires = await  partenaires.save();
 
-    const auth = await authModel.findById(req.user.id_user).exec();
+    let auth = undefined;
+
+    if(userId != undefined) {
+         auth = await authModel.findById(userId).exec();
+    }else {
+         auth = await authModel.findById(req.user.id_user).exec();
+    }
 
     auth.partenaires.push(savePartenaires.id) ;
 
