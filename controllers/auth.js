@@ -15,18 +15,15 @@ const nodemailer = require('nodemailer');
 
 const hbs = require('nodemailer-express-handlebars');
 
-const veriffMAil = require('deep-email-validator');
 
 const message = require('../utils/message');
 
 const codeEmail = require('../models/code-email');
 
-const kickbox = require('kickbox').client(process.env.KEYKICKBOX).kickbox();
 
 const axios = require('axios');
 
 
-const emailExistence = require('email-existence');
 
 const fs = require('fs');
 
@@ -178,12 +175,12 @@ exports.forgetPassword = async (req, res, next) => {
             // Configurer le transporteur SMTP
             const transporter = nodemailer.createTransport({
                 service: 'SMTP',
-                host: 'smtp.ionos.fr', // 'ssl0.ovh.net',
+                host: 'mail.simplonsolution.com', // 'ssl0.ovh.net',
                 port: 465,
                 secure: true, // Utilisez true si vous utilisez SSL/TLS
                 auth: {
-                    user: 'admin@cds-toubaouest.fr',
-                    pass: 'Senegal@2024'
+                    user: 'simplon@simplonsolution.com',
+                    pass: 'Bonjour2024@'
                 }
             });
 
@@ -195,7 +192,7 @@ exports.forgetPassword = async (req, res, next) => {
 
             // Définir les informations de l'e-mail
             const mailOptions = {
-                from: 'admin@cds-toubaouest.fr',
+                from: '"Suport" <simplon@simplonsolution.com>',
                 to: email,
                 subject: 'Code de vérification mailling cds-touba',
                 html: `votre code de verification est le : <strong>${num}</strong> .`
@@ -363,23 +360,23 @@ exports.store = async (req, res, next) => {
         console.log(lastElement);
 
 
-        // Configurer le transporteur SMTP
-        const transporter = nodemailer.createTransport({
+         // Configurer le transporteur SMTP
+         const transporter = nodemailer.createTransport({
             service: 'SMTP',
-            host: 'smtp.ionos.fr', // 'ssl0.ovh.net',
+            host: 'mail.simplonsolution.com', // 'ssl0.ovh.net',
             port: 465,
             secure: true, // Utilisez true si vous utilisez SSL/TLS
             auth: {
-                user: 'admin@cds-toubaouest.fr',
-                pass: 'Senegal@2024'
+                user: 'simplon@simplonsolution.com',
+                pass: 'Bonjour2024@'
             }
         });
 
 
         // Définir les informations de l'e-mail
         const mailOptions = {
-            from: 'admin@cds-toubaouest.fr',
-            to: "diikaanedev@gmail.com",
+            from: '"Suport" <simplon@simplonsolution.com>',
+            to: email,
             subject: 'création de votre compte cds',
             html: `votre compte viens d'être crééer  allez vous conecter sur le lien <strong> <a href ="https://cds-toubaouest.fr/">ci-aprés</a></strong> .`,
             attachments: [
@@ -594,21 +591,21 @@ exports.update = async (req, res, next) => {
 
             auth.active = req.body.active;
 
-            // Configurer le transporteur SMTP
-            const transporter = nodemailer.createTransport({
-                service: 'SMTP',
-                host: 'smtp.ionos.fr', // 'ssl0.ovh.net',
-                port: 465,
-                secure: true, // Utilisez true si vous utilisez SSL/TLS
-                auth: {
-                    user: 'admin@cds-toubaouest.fr',
-                    pass: 'Senegal@2024'
-                }
-            });
+             // Configurer le transporteur SMTP
+         const transporter = nodemailer.createTransport({
+            service: 'SMTP',
+            host: 'mail.simplonsolution.com', // 'ssl0.ovh.net',
+            port: 465,
+            secure: true, // Utilisez true si vous utilisez SSL/TLS
+            auth: {
+                user: 'simplon@simplonsolution.com',
+                pass: 'Bonjour2024@'
+            }
+        });
 
             // Définir les informations de l'e-mail
             const mailOptions = {
-                from: 'admin@cds-toubaouest.fr',
+                from: '"Suport" <simplon@simplonsolution.com>',
                 to: auth.email,
                 subject: 'Validification compte cds-touba',
                 html: `votre compte viens d'être <strong>${req.body.active}</strong>  allez vous conecter sur le lien <strong> <a href ="https://cds-toubaouest.fr/">ci-aprés</a></strong> .`
@@ -767,22 +764,21 @@ exports.restaurePassword = async (req, res) => {
 
     if (UserEmailF) {
 
-        // Configurer le transporteur SMTP
-        const transporter = nodemailer.createTransport({
+          // Configurer le transporteur SMTP
+          const transporter = nodemailer.createTransport({
             service: 'SMTP',
-            host: 'smtp.ionos.fr', // 'ssl0.ovh.net',
+            host: 'mail.simplonsolution.com', // 'ssl0.ovh.net',
             port: 465,
             secure: true, // Utilisez true si vous utilisez SSL/TLS
             auth: {
-                user: 'admin@cds-toubaouest.fr',
-                pass: 'Senegal@2024'
+                user: 'simplon@simplonsolution.com',
+                pass: 'Bonjour2024@'
             }
         });
 
-
         // Définir les informations de l'e-mail
         const mailOptions = {
-            from: 'admin@cds-toubaouest.fr',
+            from: '"Suport" <simplon@simplonsolution.com>',
             to: req.body.email,
             subject: 'recuperation  de votre mot de passe cds',
             html: `Cliquez sur le lien pour generer un nouveau mot de passe compte viens d'être crééer  allez vous conecter sur le lien <strong> <a href ="https://cds-toubaouest.fr/">ci-aprés</a></strong> .`,
