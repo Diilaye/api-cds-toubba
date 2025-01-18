@@ -192,7 +192,7 @@ exports.forgetPassword = async (req, res, next) => {
 
             // Définir les informations de l'e-mail
             const mailOptions = {
-                from: '"Suport" <simplon@simplonsolution.com>',
+                comom: '"Suport" <simplon@simplonsolution.com>',
                 to: email,
                 subject: 'Code de vérification mailling cds-touba',
                 html: `votre code de verification est le : <strong>${num}</strong> .`
@@ -375,10 +375,10 @@ exports.store = async (req, res, next) => {
 
         // Définir les informations de l'e-mail
         const mailOptions = {
-            from: '"Suport" <simplon@simplonsolution.com>',
+            comom: '"Suport" <simplon@simplonsolution.com>',
             to: email,
             subject: 'création de votre compte cds',
-            html: `votre compte viens d'être crééer  allez vous conecter sur le lien <strong> <a href ="https://cds-toubaouest.fr/">ci-aprés</a></strong> .`,
+            html: `votre compte viens d'être crééer  allez vous conecter sur le lien <strong> <a href ="https://cds-toubaouest.com/">ci-aprés</a></strong> .`,
             attachments: [
                 {
                     filename: 'document-justificatif.' + extention,
@@ -446,13 +446,13 @@ exports.all = async (req, res, next) => {
             total_pages: totalPages,
             users: users,
             links: {
-                first: `https://cds-toubaouest.fr/users?page=1&perPage=${perPage}`,
-                last: `https://cds-toubaouest.fr/users?page=${totalPages}&perPage=${perPage}`,
+                first: `https://cds-toubaouest.com/users?page=1&perPage=${perPage}`,
+                last: `https://cds-toubaouest.com/users?page=${totalPages}&perPage=${perPage}`,
                 prev: prevPage
-                    ? `https://cds-toubaouest.fr/users?page=${prevPage}&perPage=${perPage}`
+                    ? `https://cds-toubaouest.com/users?page=${prevPage}&perPage=${perPage}`
                     : null,
                 next: nextPage
-                    ? `https://cds-toubaouest.fr/users?page=${nextPage}&perPage=${perPage}`
+                    ? `https://cds-toubaouest.com/users?page=${nextPage}&perPage=${perPage}`
                     : null,
             }
         });
@@ -605,10 +605,10 @@ exports.update = async (req, res, next) => {
 
             // Définir les informations de l'e-mail
             const mailOptions = {
-                from: '"Suport" <simplon@simplonsolution.com>',
+                comom: '"Suport" <simplon@simplonsolution.com>',
                 to: auth.email,
                 subject: 'Validification compte cds-touba',
-                html: `votre compte viens d'être <strong>${req.body.active}</strong>  allez vous conecter sur le lien <strong> <a href ="https://cds-toubaouest.fr/">ci-aprés</a></strong> .`
+                html: `votre compte viens d'être <strong>${req.body.active}</strong>  allez vous conecter sur le lien <strong> <a href ="https://cds-toubaouest.com/">ci-aprés</a></strong> .`
             };
 
             // Envoyer l'e-mail
@@ -778,10 +778,10 @@ exports.restaurePassword = async (req, res) => {
 
         // Définir les informations de l'e-mail
         const mailOptions = {
-            from: '"Suport" <simplon@simplonsolution.com>',
+            comom: '"Suport" <simplon@simplonsolution.com>',
             to: req.body.email,
             subject: 'recuperation  de votre mot de passe cds',
-            html: `Cliquez sur le lien pour generer un nouveau mot de passe compte viens d'être crééer  allez vous conecter sur le lien <strong> <a href ="https://cds-toubaouest.fr/">ci-aprés</a></strong> .`,
+            html: `Cliquez sur le lien pour generer un nouveau mot de passe compte viens d'être crééer  allez vous conecter sur le lien <strong> <a href ="https://cds-toubaouest.com/">ci-aprés</a></strong> .`,
         };
         // Envoyer l'e-mail
         transporter.sendMail(mailOptions, (error, info) => {
